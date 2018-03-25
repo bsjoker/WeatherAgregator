@@ -17,6 +17,7 @@ import io.realm.RealmConfiguration;
 
 public class MyApplication extends Application {
 
+
     private static ApplicationComponent sApplicationComponent;
 
     private static MyApplication myApplicationInstance;
