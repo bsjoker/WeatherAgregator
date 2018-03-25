@@ -4,9 +4,14 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class Daily5ForecastAW {
+public class Daily5ForecastAW extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
 
     @SerializedName("Date")
     @Expose
@@ -22,10 +27,10 @@ public class Daily5ForecastAW {
     private Moon moon;
     @SerializedName("Temperature")
     @Expose
-    private Temperature temperature;
+    private TemperatureAW mTemperatureAW;
     @SerializedName("RealFeelTemperature")
     @Expose
-    private RealFeelTemperature realFeelTemperature;
+    private RealFeelTemperatureAW mRealFeelTemperatureAW;
     @SerializedName("RealFeelTemperatureShade")
     @Expose
     private RealFeelTemperatureShade realFeelTemperatureShade;
@@ -35,9 +40,9 @@ public class Daily5ForecastAW {
     @SerializedName("DegreeDaySummary")
     @Expose
     private DegreeDaySummary degreeDaySummary;
-    @SerializedName("AirAndPollen")
-    @Expose
-    private List<AirAndPollen> airAndPollen = null;
+//    @SerializedName("AirAndPollen")
+//    @Expose
+//    private RealmList<AirAndPollen> airAndPollen = null;
     @SerializedName("Day")
     @Expose
     private Day day;
@@ -46,13 +51,21 @@ public class Daily5ForecastAW {
     private Night night;
     @SerializedName("Sources")
     @Expose
-    private List<String> sources = null;
+    private RealmList<String> sources = null;
     @SerializedName("MobileLink")
     @Expose
     private String mobileLink;
     @SerializedName("Link")
     @Expose
     private String link;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getDate() {
         return date;
@@ -86,20 +99,20 @@ public class Daily5ForecastAW {
         this.moon = moon;
     }
 
-    public Temperature getTemperature() {
-        return temperature;
+    public TemperatureAW getTemperatureAW() {
+        return mTemperatureAW;
     }
 
-    public void setTemperature(Temperature temperature) {
-        this.temperature = temperature;
+    public void setTemperatureAW(TemperatureAW temperatureAW) {
+        this.mTemperatureAW = temperatureAW;
     }
 
-    public RealFeelTemperature getRealFeelTemperature() {
-        return realFeelTemperature;
+    public RealFeelTemperatureAW getRealFeelTemperatureAW() {
+        return mRealFeelTemperatureAW;
     }
 
-    public void setRealFeelTemperature(RealFeelTemperature realFeelTemperature) {
-        this.realFeelTemperature = realFeelTemperature;
+    public void setRealFeelTemperatureAW(RealFeelTemperatureAW realFeelTemperatureAW) {
+        this.mRealFeelTemperatureAW = realFeelTemperatureAW;
     }
 
     public RealFeelTemperatureShade getRealFeelTemperatureShade() {
@@ -126,13 +139,13 @@ public class Daily5ForecastAW {
         this.degreeDaySummary = degreeDaySummary;
     }
 
-    public List<AirAndPollen> getAirAndPollen() {
-        return airAndPollen;
-    }
-
-    public void setAirAndPollen(List<AirAndPollen> airAndPollen) {
-        this.airAndPollen = airAndPollen;
-    }
+//    public RealmList<AirAndPollen> getAirAndPollen() {
+//        return airAndPollen;
+//    }
+//
+//    public void setAirAndPollen(RealmList<AirAndPollen> airAndPollen) {
+//        this.airAndPollen = airAndPollen;
+//    }
 
     public Day getDay() {
         return day;
@@ -150,11 +163,11 @@ public class Daily5ForecastAW {
         this.night = night;
     }
 
-    public List<String> getSources() {
+    public RealmList<String> getSources() {
         return sources;
     }
 
-    public void setSources(List<String> sources) {
+    public void setSources(RealmList<String> sources) {
         this.sources = sources;
     }
 

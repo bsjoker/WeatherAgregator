@@ -22,6 +22,14 @@ public class Full<T> {
     @Expose
     public T response;
 
+    @SerializedName("current_observation")
+    @Expose
+    public T currentData;
+
+    @SerializedName("sun_phase")
+    @Expose
+    public T astronomyData;
+
     @SerializedName("forecast")
     @Expose
     public T daily5forecastWU;
@@ -34,6 +42,8 @@ public class Full<T> {
     @Expose
     public List<T> hourly_forecast_wa;
 
-
+    @SerializedName("geonames")
+    @Expose
+    public List<T> geonames_list;
 
 }

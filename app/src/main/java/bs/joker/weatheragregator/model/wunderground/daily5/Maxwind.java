@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.wunderground.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Maxwind {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Maxwind extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("mph")
     @Expose
     private Integer mph;
@@ -18,6 +23,14 @@ public class Maxwind {
     @SerializedName("degrees")
     @Expose
     private Integer degrees;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getMph() {
         return mph;

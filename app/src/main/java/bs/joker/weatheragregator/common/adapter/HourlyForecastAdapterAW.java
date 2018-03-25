@@ -69,7 +69,7 @@ public class HourlyForecastAdapterAW extends RecyclerView.Adapter<BaseViewHolder
             registerTypeInstance(item);
         }
         Log.d(TAG, "Adapter: " + items.size());
-        //list.clear();
+        list.clear();
         list.addAll(items);
         notifyDataSetChanged();
     }

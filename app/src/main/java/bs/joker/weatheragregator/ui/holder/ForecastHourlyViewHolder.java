@@ -1,6 +1,8 @@
 package bs.joker.weatheragregator.ui.holder;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,8 +10,8 @@ import android.widget.TextView;
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
 import bs.joker.weatheragregator.model.view.ForecastHourlyItemViewModel;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by bakays on 07.12.2017.
@@ -17,49 +19,45 @@ import butterknife.Unbinder;
 
 public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemViewModel> {
 
-//    @BindView(R.id.time_date_text_view)
-//    TextView time_date_text_view;
-//
-//    @BindView(R.id.description_weather_text_view)
-//    TextView description_weather_text_view;
-//
-//    @BindView(R.id.weather_icon_image_view)
+    @BindView(R.id.time_date_text_view)
+    public TextView time_date_text_view;
+    @BindView(R.id.description_weather_text_view)
+    public TextView description_weather_text_view;
+    @BindView(R.id.precipation)
+    public TextView precipation;
+    @BindView(R.id.wind_direction_text_view)
+    public TextView wind_direction_text_view;
+    @BindView(R.id.wind_speed_text_view)
+    public TextView wind_speed_text_view;
+    @BindView(R.id.temp_text_view)
+    public TextView temp_text_view;
+
+    @BindView(R.id.weather_icon_image_view)
+    public ImageView weather_icon_image_view;
+
+//    TextView time_date_text_view, description_weather_text_view, precipation, wind_speed_text_view, wind_direction_text_view, temp_text_view;
 //    ImageView weather_icon_image_view;
-//
-//    @BindView(R.id.wind_image_view)
-//    ImageView wind_image_view;
-//
-//    @BindView(R.id.wind_speed_text_view)
-//    TextView wind_speed_text_view;
-//
-//    @BindView(R.id.temp_min_text_view)
-//    TextView temp_min_text_view;
-//
-//    @BindView(R.id.temp_max_text_view)
-//    TextView temp_max_text_view;
 
-    TextView time_date_text_view, description_weather_text_view, precipation, wind_speed_text_view, wind_direction_text_view, temp_text_view;
-    ImageView weather_icon_image_view;
-
-    private Unbinder mUnbinder;
+    private Resources mResources;
     private Context mContext;
 
     public ForecastHourlyViewHolder(View itemView) {
         super(itemView);
 
-        mUnbinder = ButterKnife.bind(this, itemView);
+        ButterKnife.bind(this, itemView);
 
-        time_date_text_view = (TextView) itemView.findViewById(R.id.time_date_text_view);
-        description_weather_text_view = (TextView) itemView.findViewById(R.id.description_weather_text_view);
-        weather_icon_image_view = (ImageView) itemView.findViewById(R.id.weather_icon_image_view);
-        precipation = (TextView) itemView.findViewById(R.id.precipation);
-        wind_speed_text_view = (TextView) itemView.findViewById(R.id.wind_speed_text_view);
-        wind_direction_text_view = (TextView) itemView.findViewById(R.id.wind_direction_text_view);
-        temp_text_view = (TextView) itemView.findViewById(R.id.temp_text_view);
+        //time_date_text_view = (TextView) itemView.findViewById(R.id.time_date_text_view);
+        //description_weather_text_view = (TextView) itemView.findViewById(R.id.description_weather_text_view);
+        //weather_icon_image_view = (ImageView) itemView.findViewById(R.id.weather_icon_image_view);
+        //precipation = (TextView) itemView.findViewById(R.id.precipation);
+        //wind_speed_text_view = (TextView) itemView.findViewById(R.id.wind_speed_text_view);
+        //wind_direction_text_view = (TextView) itemView.findViewById(R.id.wind_direction_text_view);
+        //temp_text_view = (TextView) itemView.findViewById(R.id.temp_text_view);
 
         MyApplication.getApplicationComponent().inject(this);
 
         mContext = itemView.getContext();
+        mResources = mContext.getResources();
     }
 
     @Override
@@ -159,22 +157,23 @@ public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemV
 
         if (notation.contains("metric")) {
             wind_speed = (int) (Double.valueOf(items.getWindSpeed()) * 0.28);
-            wind_speed_text_view.setText(wind_speed + " " + mContext.getString(R.string.speed_metric));
+            wind_speed_text_view.setText(wind_speed + " " + mResources.getString(R.string.speed_metric));
             wind_direction_text_view.setText(" - " + items.getWindDirection());
-            temp_text_view.setText(items.getTemp() + mContext.getString(R.string.degrees_Celsius));
+            temp_text_view.setText(items.getTemp() + mResources.getString(R.string.degrees));
         } else {
-            wind_speed_text_view.setText(items.getWindSpeed() + " " + mContext.getString(R.string.speed_english));
+            wind_speed_text_view.setText(items.getWindSpeed() + " " + mResources.getString(R.string.speed_english));
             wind_direction_text_view.setText(" - " + items.getWindDirection());
-            temp_text_view.setText(items.getTemp() + mContext.getString(R.string.degrees_Fahrenheit));
+            temp_text_view.setText(items.getTemp() + mResources.getString(R.string.degrees));
         }
     }
 
     @Override
     public void unBindViewHolder() {
+        Log.d("VH", "UnbinderHourlyVH");
         time_date_text_view.setText(null);
         description_weather_text_view.setText(null);
-        weather_icon_image_view = null;
         wind_speed_text_view.setText(null);
         temp_text_view.setText(null);
+//      weather_icon_image_view = null;
     }
 }

@@ -1,5 +1,6 @@
 package bs.joker.weatheragregator.ui.frgment;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import javax.inject.Inject;
 
 import bs.joker.MyApplication;
+
+import bs.joker.weatheragregator.di.module.StorageModule;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
 import bs.joker.weatheragregator.rest.api.WeatherApi;
@@ -43,6 +46,7 @@ public class Daily5ForecastFragment extends BaseDaily5ForecastFragment {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt("position");
         Log.d("Daily5ForecastFragment", "Pos: " + position);
+
         MyApplication.getApplicationComponent().inject(this);
     }
 

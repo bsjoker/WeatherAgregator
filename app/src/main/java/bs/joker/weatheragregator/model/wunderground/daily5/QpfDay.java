@@ -4,14 +4,28 @@ package bs.joker.weatheragregator.model.wunderground.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class QpfDay {
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
 
+public class QpfDay extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("in")
     @Expose
     private Double in;
     @SerializedName("mm")
     @Expose
     private Integer mm;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Double getIn() {
         return in;

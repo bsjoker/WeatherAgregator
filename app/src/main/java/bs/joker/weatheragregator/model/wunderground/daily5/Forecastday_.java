@@ -4,7 +4,13 @@ package bs.joker.weatheragregator.model.wunderground.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Forecastday_ {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Forecastday_ extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
 
     @SerializedName("date")
     @Expose
@@ -66,6 +72,14 @@ public class Forecastday_ {
     @SerializedName("minhumidity")
     @Expose
     private Integer minhumidity;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Date getDate() {
         return date;

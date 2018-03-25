@@ -34,8 +34,8 @@ public class ForecastDaily5ItemViewModel extends BaseViewModel {
         this.icon_night = ConvertDescriptionCode.convertCodeAW(daily5forecastAW.getNight().getIcon());
         this.description_day = daily5forecastAW.getDay().getShortPhrase();
         this.description_night = daily5forecastAW.getNight().getShortPhrase();
-        this.temp_max = String.valueOf(daily5forecastAW.getTemperature().getMaximum().getValue().intValue());
-        this.temp_min = String.valueOf(daily5forecastAW.getTemperature().getMinimum().getValue().intValue());
+        this.temp_max = String.valueOf(daily5forecastAW.getTemperatureAW().getMaximum().getValue().intValue());
+        this.temp_min = String.valueOf(daily5forecastAW.getTemperatureAW().getMinimum().getValue().intValue());
     }
 
     public ForecastDaily5ItemViewModel(DailyForecastDarksky daily5forecastDS){
@@ -44,8 +44,10 @@ public class ForecastDaily5ItemViewModel extends BaseViewModel {
         this.icon_night = ConvertDescriptionCode.convertCodeDS(daily5forecastDS.getIcon());
         this.description_day = ConvertDescriptionCode.convertDescriptionDS(daily5forecastDS.getIcon());
         this.description_night = ConvertDescriptionCode.convertDescriptionDS(daily5forecastDS.getIcon());
-        this.temp_max = String.valueOf(daily5forecastDS.getTemperatureHigh().intValue());
-        this.temp_min = String.valueOf(daily5forecastDS.getTemperatureLow().intValue());
+        int temp_max = (int)Math.round(daily5forecastDS.getTemperatureHigh());
+        this.temp_max = String.valueOf(temp_max);
+        int temp_min = (int)Math.round(daily5forecastDS.getTemperatureLow());
+        this.temp_min = String.valueOf(temp_min);
     }
 
     @Override

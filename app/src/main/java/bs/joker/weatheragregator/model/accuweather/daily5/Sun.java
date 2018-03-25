@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Sun {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Sun extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("Rise")
     @Expose
     private String rise;
@@ -18,6 +23,14 @@ public class Sun {
     @SerializedName("EpochSet")
     @Expose
     private Integer epochSet;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getRise() {
         return rise;

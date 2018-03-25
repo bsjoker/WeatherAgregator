@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.wunderground;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FCTTIME {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class FCTTIME extends RealmObject {
+
+    @PrimaryKey
+    private Integer id;
     @SerializedName("hour")
     @Expose
     private String hour;
@@ -88,6 +93,13 @@ public class FCTTIME {
     @Expose
     private String uTCDATE;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getHour() {
         return hour;
     }

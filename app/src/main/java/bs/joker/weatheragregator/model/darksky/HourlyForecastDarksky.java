@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.darksky;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class HourlyForecastDarksky {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class HourlyForecastDarksky extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("time")
     @Expose
     private Integer time;
@@ -63,6 +68,14 @@ public class HourlyForecastDarksky {
     @SerializedName("ozone")
     @Expose
     private Double ozone;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getTime() {
         return time;

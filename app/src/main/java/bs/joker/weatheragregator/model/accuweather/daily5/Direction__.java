@@ -4,7 +4,9 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Direction__ {
+import io.realm.RealmObject;
+
+public class Direction__ extends RealmObject {
 
     @SerializedName("Degrees")
     @Expose

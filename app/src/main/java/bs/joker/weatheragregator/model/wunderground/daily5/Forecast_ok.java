@@ -3,29 +3,30 @@ package bs.joker.weatheragregator.model.wunderground.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by bakays on 18.01.2018.
  */
 
-public class Forecast_ok {
+public class Forecast_ok extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
+
     @SerializedName("date")
     @Expose
     private Date date;
 
-    private String date_readable;
-
-    private String temp_max;
-    private String temp_min;
-
-    private String description_day;
-    private String description_night;
-
     @SerializedName("high")
     @Expose
     private High high;
+
     @SerializedName("low")
     @Expose
     private Low low;
+
     @SerializedName("conditions")
     @Expose
     private String conditions;
@@ -73,6 +74,12 @@ public class Forecast_ok {
     @SerializedName("icon")
     @Expose
     private String icon;
+
+    private String date_readable;
+    private String temp_max;
+    private String temp_min;
+    private String description_day;
+    private String description_night;
     private String icon_day;
     private String icon_night;
     @SerializedName("icon_url")
@@ -90,6 +97,14 @@ public class Forecast_ok {
     @SerializedName("pop")
     @Expose
     private String pop;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getDate_readable() {
         return date_readable;

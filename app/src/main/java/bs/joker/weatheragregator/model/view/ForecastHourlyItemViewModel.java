@@ -3,9 +3,10 @@ package bs.joker.weatheragregator.model.view;
 import android.util.Log;
 import android.view.View;
 
-import java.text.ParseException;
+import android.text.format.Time;
 
 import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
+import bs.joker.weatheragregator.common.utils.DayNight;
 import bs.joker.weatheragregator.common.utils.DirectionWind;
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
@@ -27,6 +28,7 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
     private int mDescriptionCode, mId;
     private String precipation;
     private boolean mDay = true;
+    private Time curTime;
 
     public ForecastHourlyItemViewModel(HourlyForecastWunderground hourlyForecastWunderground) {
         this.mTimeDate = hourlyForecastWunderground.getFCTTIME().getHour() + ":" + hourlyForecastWunderground.getFCTTIME().getMin();
@@ -37,13 +39,10 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
 
         this.mWindSpeed = hourlyForecastWunderground.getWspd().getMetric();
         this.mTemp = hourlyForecastWunderground.getTemp().getMetric();
-        if (Integer.valueOf(hourlyForecastWunderground.getFCTTIME().getHour()) >= 18
-                && Integer.valueOf(hourlyForecastWunderground.getFCTTIME().getHour()) <= 6) {
-            this.mDay = false;
-        }
+        this.mDay = DayNight.isDay(Long.valueOf(hourlyForecastWunderground.getFCTTIME().getEpoch())*1000L);
     }
 
-    public ForecastHourlyItemViewModel(HourlyForecastAccuweather hourlyForecastAccuweather) throws ParseException {
+    public ForecastHourlyItemViewModel(HourlyForecastAccuweather hourlyForecastAccuweather) {
         this.mTimeDate = new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(hourlyForecastAccuweather.getEpochDateTime()*1000L));
         this.mDescriptionWeather = hourlyForecastAccuweather.getIconPhrase();
         this.mWindDirection = hourlyForecastAccuweather.getWind().getDirection().getLocalized();
@@ -57,7 +56,7 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
     }
 
     public ForecastHourlyItemViewModel(HourlyForecastDarksky hourlyForecastDarksky) {
-        this.mTimeDate = new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date((hourlyForecastDarksky.getTime()+3600L)*1000L));
+        this.mTimeDate = new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date((hourlyForecastDarksky.getTime())*1000L));
         this.mDescriptionWeather = hourlyForecastDarksky.getSummary();
         this.mWindDirection = DirectionWind.getDirectWind(hourlyForecastDarksky.getWindBearing());
         double prec = hourlyForecastDarksky.getPrecipProbability().intValue()*100;
@@ -66,7 +65,7 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
 
         this.mWindSpeed = String.valueOf(hourlyForecastDarksky.getWindSpeed());
         this.mTemp = String.valueOf(hourlyForecastDarksky.getTemperature().intValue());
-        this.mDay = true;
+        this.mDay = DayNight.isDay((hourlyForecastDarksky.getTime())*1000L);
     }
 
     @Override
@@ -76,6 +75,8 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
 
     @Override
     protected BaseViewHolder onCreateViewHolder(View view) {
+        curTime = new Time(Time.getCurrentTimezone());
+        curTime.setToNow();
         return new ForecastHourlyViewHolder(view);
     }
 

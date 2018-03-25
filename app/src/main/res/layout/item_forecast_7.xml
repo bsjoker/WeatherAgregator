@@ -8,8 +8,8 @@
                 android:padding="5dp">
 
     <LinearLayout
-        android:id="@+id/time_weather"
-        android:layout_width="110dp"
+        android:id="@+id/date_weather"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -18,83 +18,57 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/time_date_text_view"
+            android:id="@+id/day_of_week_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="00:00"
-            android:textSize="17sp"/>
+            android:text="понедельник"
+            android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/description_weather_text_view"
-            android:layout_width="100dp"
+            android:id="@+id/description_tv"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:inputType="textMultiLine"
             android:text="Снег с дождём"
-            android:textSize="9sp"/>
+            android:textSize="12sp"/>
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/weather_icon_image_view"
+        android:id="@+id/weather_icon_iv"
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.338"
-        android:src="@drawable/clear_sky_d_black"/>
+        android:src="@drawable/clear_sky_d_black"
+        app:layout_constraintHorizontal_bias="0.588"/>
 
     <TextView
-        android:id="@+id/precipation"
+        android:id="@+id/temp_max_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.440"
-        android:text="100%"
-        android:textSize="8sp"
-        android:visibility="gone"/>
+        app:layout_constraintHorizontal_bias="0.85"
+        android:text="22°"
+        android:textSize="24sp"
+        app:layout_constraintVertical_bias="0.5"/>
 
     <TextView
-        android:id="@+id/wind_speed_text_view"
+        android:id="@+id/temp_min_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.60"
-        android:text="22 км/ч"
-        android:textSize="15sp"
-        />
-
-    <TextView
-        android:id="@+id/wind_direction_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/wind_speed_text_view"
-        app:layout_constraintLeft_toRightOf="@id/wind_speed_text_view"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        android:text="- ЮЮЗ"
-        android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/wind_speed_text_view"/>
-
-    <TextView
-        android:id="@+id/temp_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/temp_max_tv"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="1"
-        android:text="22°C"
-        android:textSize="22sp"
-        app:layout_constraintVertical_bias="0.512"/>
+        android:text="22°"
+        android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"/>
 </android.support.constraint.ConstraintLayout>

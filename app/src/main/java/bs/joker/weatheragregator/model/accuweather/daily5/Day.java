@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Day {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Day extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("Icon")
     @Expose
     private Integer icon;
@@ -35,22 +40,22 @@ public class Day {
     private Integer iceProbability;
     @SerializedName("Wind")
     @Expose
-    private Wind wind;
+    private WindAW mWindAW;
     @SerializedName("WindGust")
     @Expose
-    private WindGust windGust;
+    private WindGustAW mWindGustAW;
     @SerializedName("TotalLiquid")
     @Expose
-    private TotalLiquid totalLiquid;
+    private TotalLiquidAW mTotalLiquidAW;
     @SerializedName("Rain")
     @Expose
-    private Rain rain;
+    private RainAW mRainAW;
     @SerializedName("Snow")
     @Expose
-    private Snow snow;
+    private SnowD5AW mSnowD5AW;
     @SerializedName("Ice")
     @Expose
-    private Ice ice;
+    private IceAW mIceAW;
     @SerializedName("HoursOfPrecipitation")
     @Expose
     private Double hoursOfPrecipitation;
@@ -66,6 +71,14 @@ public class Day {
     @SerializedName("CloudCover")
     @Expose
     private Integer cloudCover;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getIcon() {
         return icon;
@@ -139,52 +152,52 @@ public class Day {
         this.iceProbability = iceProbability;
     }
 
-    public Wind getWind() {
-        return wind;
+    public WindAW getWindAW() {
+        return mWindAW;
     }
 
-    public void setWind(Wind wind) {
-        this.wind = wind;
+    public void setWindAW(WindAW windAW) {
+        this.mWindAW = windAW;
     }
 
-    public WindGust getWindGust() {
-        return windGust;
+    public WindGustAW getWindGustAW() {
+        return mWindGustAW;
     }
 
-    public void setWindGust(WindGust windGust) {
-        this.windGust = windGust;
+    public void setWindGustAW(WindGustAW windGustAW) {
+        this.mWindGustAW = windGustAW;
     }
 
-    public TotalLiquid getTotalLiquid() {
-        return totalLiquid;
+    public TotalLiquidAW getTotalLiquidAW() {
+        return mTotalLiquidAW;
     }
 
-    public void setTotalLiquid(TotalLiquid totalLiquid) {
-        this.totalLiquid = totalLiquid;
+    public void setTotalLiquidAW(TotalLiquidAW totalLiquidAW) {
+        this.mTotalLiquidAW = totalLiquidAW;
     }
 
-    public Rain getRain() {
-        return rain;
+    public RainAW getRainAW() {
+        return mRainAW;
     }
 
-    public void setRain(Rain rain) {
-        this.rain = rain;
+    public void setRainAW(RainAW rainAW) {
+        this.mRainAW = rainAW;
     }
 
-    public Snow getSnow() {
-        return snow;
+    public SnowD5AW getSnowD5AW() {
+        return mSnowD5AW;
     }
 
-    public void setSnow(Snow snow) {
-        this.snow = snow;
+    public void setSnowD5AW(SnowD5AW snowD5AW) {
+        this.mSnowD5AW = snowD5AW;
     }
 
-    public Ice getIce() {
-        return ice;
+    public IceAW getIceAW() {
+        return mIceAW;
     }
 
-    public void setIce(Ice ice) {
-        this.ice = ice;
+    public void setIceAW(IceAW iceAW) {
+        this.mIceAW = iceAW;
     }
 
     public Double getHoursOfPrecipitation() {

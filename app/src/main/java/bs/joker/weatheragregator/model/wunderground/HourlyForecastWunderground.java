@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.wunderground;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class HourlyForecastWunderground {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class HourlyForecastWunderground extends RealmObject{
+
+    @PrimaryKey
+    private Integer id;
     @SerializedName("FCTTIME")
     @Expose
     private FCTTIME fCTTIME;
@@ -67,12 +72,20 @@ public class HourlyForecastWunderground {
     @Expose
     private Mslp mslp;
 
-    public FCTTIME getFCTTIME() {
-        return fCTTIME;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setFCTTIME(FCTTIME fCTTIME) {
         this.fCTTIME = fCTTIME;
+    }
+
+    public FCTTIME getFCTTIME() {
+        return fCTTIME;
     }
 
     public Temp getTemp() {

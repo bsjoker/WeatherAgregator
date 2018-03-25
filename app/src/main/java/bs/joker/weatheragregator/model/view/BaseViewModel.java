@@ -24,7 +24,8 @@ public abstract class BaseViewModel {
 
     public enum LayoutTypes {
         ForecastHourly(R.layout.item_forecast),
-        ForecastDaily(R.layout.item_forecast_5);
+        ForecastDaily(R.layout.item_forecast_5),
+        ForecastWeekly(R.layout.item_forecast_7);
 
         private final int id;
 

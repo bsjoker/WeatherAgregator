@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.wunderground.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Date {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Date extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("epoch")
     @Expose
     private String epoch;
@@ -57,6 +62,14 @@ public class Date {
     @SerializedName("tz_long")
     @Expose
     private String tzLong;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getEpoch() {
         return epoch;

@@ -3,6 +3,7 @@ package bs.joker.weatheragregator.common.manager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -42,7 +43,8 @@ public class NetworkManager {
             @Override
             public Boolean call() throws Exception {
                 try{
-                    if (isConnected()){
+                    if (!isConnected()){
+                        Log.d("NetworManager", "Disconnect");
                         return false;
                     }
 
@@ -51,6 +53,7 @@ public class NetworkManager {
                     urlc.setConnectTimeout(2000);
                     urlc.connect();
 
+                    Log.d("NetworManager", "Connect");
                     return true;
                 }catch (Exception e) {
                     return false;

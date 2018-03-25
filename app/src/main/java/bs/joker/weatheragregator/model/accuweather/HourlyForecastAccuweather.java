@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class HourlyForecastAccuweather {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class HourlyForecastAccuweather extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("DateTime")
     @Expose
     private String dateTime;
@@ -32,7 +37,7 @@ public class HourlyForecastAccuweather {
     private WetBulbTemperature wetBulbTemperature;
     @SerializedName("DewPoint")
     @Expose
-    private DewPoint dewPoint;
+    private DewPointAW mDewPointAW;
     @SerializedName("Wind")
     @Expose
     private Wind wind;
@@ -74,7 +79,7 @@ public class HourlyForecastAccuweather {
     private Rain rain;
     @SerializedName("Snow")
     @Expose
-    private Snow snow;
+    private SnowAW mSnowAW;
     @SerializedName("Ice")
     @Expose
     private Ice ice;
@@ -87,6 +92,14 @@ public class HourlyForecastAccuweather {
     @SerializedName("Link")
     @Expose
     private String link;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getDateTime() {
         return dateTime;
@@ -152,12 +165,12 @@ public class HourlyForecastAccuweather {
         this.wetBulbTemperature = wetBulbTemperature;
     }
 
-    public DewPoint getDewPoint() {
-        return dewPoint;
+    public DewPointAW getDewPointAW() {
+        return mDewPointAW;
     }
 
-    public void setDewPoint(DewPoint dewPoint) {
-        this.dewPoint = dewPoint;
+    public void setDewPointAW(DewPointAW dewPointAW) {
+        this.mDewPointAW = dewPointAW;
     }
 
     public Wind getWind() {
@@ -264,12 +277,12 @@ public class HourlyForecastAccuweather {
         this.rain = rain;
     }
 
-    public Snow getSnow() {
-        return snow;
+    public SnowAW getSnowAW() {
+        return mSnowAW;
     }
 
-    public void setSnow(Snow snow) {
-        this.snow = snow;
+    public void setSnowAW(SnowAW snowAW) {
+        this.mSnowAW = snowAW;
     }
 
     public Ice getIce() {

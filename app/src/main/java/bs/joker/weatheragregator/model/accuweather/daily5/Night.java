@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Night {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Night extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("Icon")
     @Expose
     private Integer icon;
@@ -66,6 +71,14 @@ public class Night {
     @SerializedName("CloudCover")
     @Expose
     private Integer cloudCover;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getIcon() {
         return icon;

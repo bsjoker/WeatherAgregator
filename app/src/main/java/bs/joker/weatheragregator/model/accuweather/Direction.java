@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Direction {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Direction extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("Degrees")
     @Expose
     private Integer degrees;
@@ -15,6 +20,14 @@ public class Direction {
     @SerializedName("English")
     @Expose
     private String english;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getDegrees() {
         return degrees;

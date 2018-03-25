@@ -4,7 +4,9 @@ package bs.joker.weatheragregator.model.accuweather.daily5;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Wind_ {
+import io.realm.RealmObject;
+
+public class Wind_ extends RealmObject {
 
     @SerializedName("Speed")
     @Expose

@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.accuweather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TotalLiquid {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class TotalLiquid extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("Value")
     @Expose
     private Double value;
@@ -15,6 +20,14 @@ public class TotalLiquid {
     @SerializedName("UnitType")
     @Expose
     private Integer unitType;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Double getValue() {
         return value;
