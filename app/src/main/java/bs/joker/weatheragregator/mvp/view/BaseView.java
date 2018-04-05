@@ -6,6 +6,7 @@ import com.arellomobile.mvp.MvpView;
 
 import java.util.List;
 
+import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 
@@ -27,4 +28,5 @@ public interface BaseView extends MvpView {
     void setItemsWeeklyWU(List<BaseViewModel> items);
     void setItemsWeeklyAW(List<BaseViewModel> items);
     void setItemsWeeklyDS(List<BaseViewModel> items);
+    void setItemsCIty(List<Geoname> items);
 }

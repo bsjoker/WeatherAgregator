@@ -13,8 +13,8 @@ public class ApiMethods {
     public static final String CURRENT_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/conditions/lang:RU/q/{lat},{lng}.json";
     //public static final String CURRENT_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/conditions/lang:RU/q/CA/{cityID}.json";
     //public static final String CURRENT_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/conditions/lang:RU/q/CA/Nizhnevartovsk.json";
-    public static final String HOURLY_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/hourly/lang:RU/q/CA/Nizhnevartovsk.json";
-    public static final String DAILY_5_WEEKLY_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/forecast10day/lang:RU/q/CA/Nizhnevartovsk.json";
+    public static final String HOURLY_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/hourly/lang:RU/q/{lat},{lng}.json";
+    public static final String DAILY_5_WEEKLY_WUNDERGROUND = "http://api.wunderground.com/api/f4405e44881d62b7/forecast10day/lang:RU/q/{lat},{lng}.json";
 
     //public static final String DAILY_5_ACCUWEATHER = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/288458?apikey=fgL5zwzEG7007DJ375AF2zQdY0tLKDU5&language=ru-ru&details=true&metric=true";
     //public static final String HOURLY_ACCUWEATHER = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/288458?apikey=fgL5zwzEG7007DJ375AF2zQdY0tLKDU5&language=ru-ru&details=true&metric=true";

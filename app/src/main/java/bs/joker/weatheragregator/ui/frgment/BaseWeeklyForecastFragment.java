@@ -20,6 +20,7 @@ import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapter;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterAW;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterDS;
 import bs.joker.weatheragregator.model.PreferencesHelper;
+import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
@@ -71,9 +72,12 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
         Long last_up = PreferencesHelper.getSharedPreferences().getLong("lastUpdateWeekly", 0l);
 
         boolean update = ((curTime.toMillis(false) - last_up)>3600000l);
-
+        Log.d(TAG, "State before(weekly): " + update);
         mBasePresenter = onCreateBasePresenter();
-        //mBasePresenter.loadStartWeekly(update);
+        if (PreferencesHelper.getSharedPreferences().getBoolean("ChangeCityWeekly", false)) {
+            update = true;
+        }
+        Log.d(TAG, "State (weekly): " + update);
         mBasePresenter.loadStartWeekly(update);
 
         logo_wu.setImageResource(R.drawable.wunderground_logo);
@@ -196,5 +200,11 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapterDS.setItems(items);
     }
+
+    @Override
+    public void setItemsCIty(List<Geoname> items) {
+
+    }
+
     protected abstract BasePresenter onCreateBasePresenter();
 }

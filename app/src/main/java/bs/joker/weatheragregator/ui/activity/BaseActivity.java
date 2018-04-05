@@ -4,10 +4,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -59,6 +61,7 @@ public class BaseActivity extends MvpAppCompatActivity {
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
+    TabsAdapter tabsAdapter;
     //Основные данные о погоде
     @BindView(R.id.tv_temperature)
     TextView temperature;
@@ -92,32 +95,18 @@ public class BaseActivity extends MvpAppCompatActivity {
 
         name_tab = getResources().getStringArray(R.array.names_tab);
         setSupportActionBar(toolbar);
+        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
 
-        view_pager.setAdapter(new TabsAdapter(getSupportFragmentManager()));
+        //view_pager.setAdapter(new TabsAdapter(getSupportFragmentManager()));
+        view_pager.setAdapter(tabsAdapter);
         mTabLayout.setupWithViewPager(view_pager);
+
+        setAdapter();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                //newGame();
-//                return true;
-//            case R.id.action_refresh:
-//                ScrollActivity ss = new ScrollActivity();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-//    }
+    public void setAdapter() {
+        tabsAdapter.notifyDataSetChanged();
+    }
 
     public void fragmentOnScreen(BaseFragment currentFragment) {
 
@@ -128,6 +117,7 @@ public class BaseActivity extends MvpAppCompatActivity {
 
         TabsAdapter(FragmentManager fm) {
             super(fm);
+            //notifyDataSetChanged();
         }
 
         @Override
@@ -147,6 +137,12 @@ public class BaseActivity extends MvpAppCompatActivity {
                     Log.d(LOG_TAG, "Default.");
                     return null;
             }
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object item) {
+
+            return POSITION_NONE;
         }
 
         @Override

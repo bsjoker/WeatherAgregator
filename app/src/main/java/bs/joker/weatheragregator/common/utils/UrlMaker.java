@@ -14,8 +14,6 @@ import io.realm.RealmResults;
 public class UrlMaker {
     public static final String LOG_TAG = "UrlMaker";
 
-
-
     public static String getUrl(String mUrl){
         String newUrl;
         Realm realm = Realm.getDefaultInstance();

@@ -20,6 +20,7 @@ import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapter;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterAW;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterDS;
 import bs.joker.weatheragregator.model.PreferencesHelper;
+import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
@@ -70,11 +71,16 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
 
         Long last_up = PreferencesHelper.getSharedPreferences().getLong("lastUpdateDaily", 0l);
 
-        boolean update = ((curTime.toMillis(false) - last_up)>3600000l);
 
+        boolean update = ((curTime.toMillis(false) - last_up)>3600000l);
+        Log.d(TAG, "State before (daily): " + update);
         mBasePresenter = onCreateBasePresenter();
-        //mBasePresenter.loadStartDaily(update);
-        mBasePresenter.loadStartDaily(true);
+
+        if (PreferencesHelper.getSharedPreferences().getBoolean("ChangeCityDaily", false)) {
+            update = true;
+        }
+        Log.d(TAG, "State (daily): " + update);
+        mBasePresenter.loadStartDaily(update);
 
         logo_wu.setImageResource(R.drawable.wunderground_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
@@ -196,6 +202,11 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     public void setItemsWeeklyDS(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapterDS.setItems(items);
+    }
+
+    @Override
+    public void setItemsCIty(List<Geoname> items) {
+
     }
 
     protected abstract BasePresenter onCreateBasePresenter();

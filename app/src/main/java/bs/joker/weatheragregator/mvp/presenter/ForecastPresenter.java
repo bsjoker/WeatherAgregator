@@ -74,7 +74,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
         //return mWeatherApi.getGeoNameCity(UrlMaker.getUrl(ApiMethods.CURRENT_WUNDERGROUND)).flatMap(hourlyCurrentWunderground ->
         return mWeatherApi.getGeoNameCity(UrlMaker.getUrlGeoNames(ApiMethods.GEONAMES_SEARCH, query)).flatMap(geoNames ->
         {
-            //Log.d(LOG_TAG, "ObservableCurrentWU: " + hourlyCurrentWunderground.currentData.getIcon());
+            //Log.d(LOG_TAG, "ObservableCurrentWU: " + geoNames.geonames_list.get());
             return io.reactivex.Observable.fromIterable(geoNames.geonames_list);
         });
     }
@@ -83,7 +83,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservable() {
         Log.d(LOG_TAG, "ObservableHourlyWU");
         final int[] i = {1};
-        return mWeatherApi.getForecastWU(ApiMethods.HOURLY_WUNDERGROUND).flatMap(hourlyForecastWundergroundResponse ->
+        return mWeatherApi.getForecastWU(UrlMaker.getUrl(ApiMethods.HOURLY_WUNDERGROUND)).flatMap(hourlyForecastWundergroundResponse ->
                 Observable.fromIterable(hourlyForecastWundergroundResponse.hourly_forecast_wa)
         )
                 .take(12)
@@ -144,7 +144,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservableDaily5WU() {
         Log.d(LOG_TAG, "ObservableDaily5WU");
         final int[] i = {1};
-        return mWeatherApi.getDaily5ForecastWU(ApiMethods.DAILY_5_WEEKLY_WUNDERGROUND).flatMap(daily5ForecastWundergroundResponse ->
+        return mWeatherApi.getDaily5ForecastWU(UrlMaker.getUrl(ApiMethods.DAILY_5_WEEKLY_WUNDERGROUND)).flatMap(daily5ForecastWundergroundResponse ->
                 Observable.fromIterable(ListHelper.getListDaily5WU(daily5ForecastWundergroundResponse.daily5forecastWU.simpleforecast.forecastday, daily5ForecastWundergroundResponse.daily5forecastWU.txt_forecast.forecastday))
         )
                 .take(5)
@@ -207,7 +207,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservableWeeklyWU() {
         Log.d(LOG_TAG, "ObservableWeeklyWU");
         final int[] i = {1};
-        return mWeatherApi.getWeeklyForecastWU(ApiMethods.DAILY_5_WEEKLY_WUNDERGROUND).flatMap(weeklyForecastWundergroundResponse ->
+        return mWeatherApi.getWeeklyForecastWU(UrlMaker.getUrl(ApiMethods.DAILY_5_WEEKLY_WUNDERGROUND)).flatMap(weeklyForecastWundergroundResponse ->
                 Observable.fromIterable(weeklyForecastWundergroundResponse.daily5forecastWU.simpleforecast.forecastday)
         )
                 .skip(1)
@@ -396,14 +396,15 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
         //Log.d(LOG_TAG, "Realm: " + hourlyForecastWunderground.getId());
         if (daily5ForecastWU != null) {
             items.add(new ForecastDaily5ItemViewModel(daily5ForecastWU));
-            Log.d(LOG_TAG, "RealmWU: " + daily5ForecastWU.getId());
+            Log.d(LOG_TAG, "Realm5D_WU: " + daily5ForecastWU.getId());
         }
         if (daily5ForecastAW != null) {
             items.add(new ForecastDaily5ItemViewModel(daily5ForecastAW));
-            Log.d(LOG_TAG, "RealmAW: " + daily5ForecastAW.getId());
+            Log.d(LOG_TAG, "Realm5D_AW: " + daily5ForecastAW.getId());
         }
         if (dailyForecastDarksky != null) {
             items.add(new ForecastDaily5ItemViewModel(dailyForecastDarksky));
+            Log.d(LOG_TAG, "Realm5D_DS: " + dailyForecastDarksky.getId());
         }
         return items;
     }

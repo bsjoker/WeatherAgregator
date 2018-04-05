@@ -42,7 +42,7 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt("position");
-        Log.d("HourlyForecastFragment", "Pos: " + position);
+        Log.d("HourlyForecastFragment", "onCreate");
         MyApplication.getApplicationComponent().inject(this);
     }
 

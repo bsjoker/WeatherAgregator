@@ -19,6 +19,7 @@ import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapter;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterAW;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterDS;
 import bs.joker.weatheragregator.model.PreferencesHelper;
+import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
@@ -74,8 +75,13 @@ public static final String TAG = "BaseHourlFragment";
         Log.d(TAG, "State: " + update + ". CurTime: " + curTime.toMillis(false) + ". Last_up: " + last_up + ". Minus: " + (curTime.toMillis(false) - last_up));
 
         mBasePresenter = onCreateBasePresenter();
-        //mBasePresenter.loadStart(update);
-        mBasePresenter.loadStart(true);
+
+        if (PreferencesHelper.getSharedPreferences().getBoolean("ChangeCityHourly", false)) {
+            update = true;
+        }
+        Log.d(TAG, "State: " + update);
+        mBasePresenter.loadStart(update);
+        //mBasePresenter.loadStart(true);
 
         logo_wu.setImageResource(R.drawable.wunderground_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
@@ -103,7 +109,7 @@ public static final String TAG = "BaseHourlFragment";
         mRecyclerViewDS.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void setUpAdapret(RecyclerView recyclerView) {
+    public void setUpAdapret(RecyclerView recyclerView) {
         mHourlyForecastAdapter = new HourlyForecastAdapter();
         mRecyclerViewWU.setAdapter(mHourlyForecastAdapter);
         mHourlyForecastAdapterAW = new HourlyForecastAdapterAW();
@@ -164,19 +170,19 @@ public static final String TAG = "BaseHourlFragment";
 
     @Override
     public void setItemsD5WU(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
+        Log.d(TAG, "SizeD5WU: " + items.size());
         mHourlyForecastAdapter.setItems(items);
     }
 
     @Override
     public void setItemsD5AW(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
+        Log.d(TAG, "SizeD5AW: " + items.size());
         mHourlyForecastAdapter.setItems(items);
     }
 
     @Override
     public void setItemsD5DS(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
+        Log.d(TAG, "SizeD5DS: " + items.size());
         mHourlyForecastAdapterDS.setItems(items);
     }
 
@@ -196,6 +202,22 @@ public static final String TAG = "BaseHourlFragment";
     public void setItemsWeeklyDS(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapterDS.setItems(items);
+    }
+
+    public void refresh(){
+        Log.d(TAG, "refresh");
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "OnStart");
+    }
+
+    @Override
+    public void setItemsCIty(List<Geoname> items) {
+        Log.d(TAG, "Size city: " + items.size());
     }
 
     protected abstract BasePresenter onCreateBasePresenter();

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import bs.joker.weatheragregator.common.manager.NetworkManager;
 import bs.joker.weatheragregator.model.PreferencesHelper;
+import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.astronomy.SunPhase;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
@@ -80,6 +81,46 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
                     });
         }
     }
+
+    public void loadCity(String query) {
+//        onCreateRestoreDataObservable()
+//                .toList()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnSubscribe(disposable -> {
+//                    onLoadStart();
+//                })
+//                .doFinally(() -> {
+//                    onLoadFinish();
+//                })
+//                .subscribe(repositories -> {
+//                    onLoadingSuccess(repositories);
+//                }, error -> {
+//                    error.printStackTrace();
+//                    onLoadingError(error);
+//                });
+//
+//        if (update) {
+        onCreateLoadDataObservableGeoNames(query)
+                .toList()
+                .retry()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    onLoadStart();
+                })
+                .doFinally(() -> {
+                    onLoadFinish();
+                })
+                .subscribe(repositories -> {
+                    onLoadingCitySuccess(repositories);
+                }, error -> {
+                    error.printStackTrace();
+                    onLoadingError(error);
+                });
+    }
+//    }
+
     public void loadData(boolean update) {
         onCreateRestoreDataObservable()
                 .toList()
@@ -487,6 +528,8 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public abstract Observable<CurrentObservation> onCreateLoadDataObservableCurrent();
 
+    public abstract Observable<Geoname> onCreateLoadDataObservableGeoNames(String query);
+
     public abstract Observable<BaseViewModel> onCreateLoadDataObservable();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableHourlyAW();
@@ -523,22 +566,31 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyDS();
 
-    public void loadStartAstronomy(){
+    public void loadStartAstronomy() {
         loadDataAstronomy();
     }
 
-    public void loadStartCurrent(boolean update){
+    public void loadStartCurrent(boolean update) {
         loadDataCurrent(update);
+    }
+
+    public void loadStartCity(String query) {
+        loadCity(query);
     }
 
     public void loadStart(boolean update) {
         loadData(update);
         loadDataAW(update);
         loadDataDS(update);
-        try {
-            PreferencesHelper.savePreference("lastUpdateHourly", getCurrentTime().toMillis(false));
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
+
+        if (update) {
+            try {
+                PreferencesHelper.savePreference("lastUpdateHourly", getCurrentTime().toMillis(false));
+                Log.d(LOG_TAG, "Time hourly: " + getCurrentTime() + ". " + update);
+                PreferencesHelper.savePreference("ChangeCityHourly", false);
+            } catch (InvalidClassException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -547,10 +599,14 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         loadDataDaily5AW(update);
         loadDataDaily5DS(update);
 
-        try {
-            PreferencesHelper.savePreference("lastUpdateDaily", getCurrentTime().toMillis(false));
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
+        if (update) {
+            try {
+                PreferencesHelper.savePreference("lastUpdateDaily", getCurrentTime().toMillis(false));
+                Log.d(LOG_TAG, "Time daily: " + getCurrentTime() + ". " + update);
+                PreferencesHelper.savePreference("ChangeCityDaily", false);
+            } catch (InvalidClassException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -558,10 +614,15 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         loadDataWeeklyWU(update);
         loadDataWeeklyAW(update);
         loadDataWeeklyDS(update);
-        try {
-            PreferencesHelper.savePreference("lastUpdateWeekly", getCurrentTime().toMillis(false));
-        } catch (InvalidClassException e) {
-            e.printStackTrace();
+
+        if (update) {
+            try {
+                PreferencesHelper.savePreference("lastUpdateWeekly", getCurrentTime().toMillis(false));
+                Log.d(LOG_TAG, "Time weekly: " + getCurrentTime() + ". " + update);
+                PreferencesHelper.savePreference("ChangeCityWeekly", false);
+            } catch (InvalidClassException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -637,6 +698,15 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         Log.d(LOG_TAG, "onLoadingSuccessCurrentWU() - after " + getCurrentTime());
     }
 
+    public void onLoadingCitySuccess(List<Geoname> items) {
+        Log.d(LOG_TAG, "onLoadingCitySuccess() - before " + items.size());
+        if (items.size() > 0) {
+            Log.d(LOG_TAG, "onLoadingCitySuccess() - name: " + items.get(0).getName());
+        }
+        getViewState().setItemsCIty(items);
+        Log.d(LOG_TAG, "onLoadingCitySuccess() - after");
+    }
+
     public void onLoadingSuccess(List<BaseViewModel> items) {
         Log.d(LOG_TAG, "onLoadingSuccessWU() - before " + items.size());
 
@@ -704,7 +774,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         Log.d(LOG_TAG, "saveToDb");
     }
 
-    public Time getCurrentTime(){
+    public Time getCurrentTime() {
         Time curTime = new Time(Time.getCurrentTimezone());
         curTime.setToNow();
         return curTime;

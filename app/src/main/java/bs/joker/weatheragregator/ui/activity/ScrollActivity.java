@@ -42,8 +42,11 @@ import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
+import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
+import bs.joker.weatheragregator.ui.frgment.BaseHourlyForecastFragment;
+import bs.joker.weatheragregator.ui.frgment.HourlyForecastFragment;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -61,6 +64,8 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     private AccountHeader mAccountHeader;
     private List<Geoname> cities;
 
+    BaseHourlyForecastFragment baseHourlyForecastFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,18 +73,6 @@ public class ScrollActivity extends BaseActivity implements BaseView {
         MyApplication.getApplicationComponent().inject(this);
 
         mForecastPresenter.loadStartAstronomy();
-
-
-//        Set<String> cities = new HashSet<>();
-//        cities.add(realmResults.get(0).getName());
-//        cities.add(realmResults.get(1).getName());
-//        cities.add("Уфа");
-
-//        try {
-//            PreferencesHelper.savePreference("cities", cities);
-//        } catch (InvalidClassException e) {
-//            e.printStackTrace();
-//        }
 
         setUpDrawer();
         loadCurrentData();
@@ -163,11 +156,17 @@ public class ScrollActivity extends BaseActivity implements BaseView {
 
                     try {
                         PreferencesHelper.savePreference("CurrentCity", String.valueOf(((Nameable) drawerItem).getName()));
+                        PreferencesHelper.savePreference("ChangeCityHourly", true);
+                        PreferencesHelper.savePreference("ChangeCityDaily", true);
+                        PreferencesHelper.savePreference("ChangeCityWeekly", true);
                     } catch (InvalidClassException e) {
                         e.printStackTrace();
                     }
-
-                    mForecastPresenter.loadStartCurrent(true);//loadCurrentData();
+                    mForecastPresenter.loadStartCurrent(true);
+//                    mForecastPresenter.loadStart(true);
+//                    mForecastPresenter.loadStartDaily(true);
+//                    mForecastPresenter.loadStartWeekly(true);
+                    setAdapter();
                     Log.d(TAG, "Name: " + String.valueOf(((PrimaryDrawerItem) drawerItem).getName()));
                 }
                 return false;
@@ -288,7 +287,7 @@ public class ScrollActivity extends BaseActivity implements BaseView {
 
     @Override
     public void setItems(List<BaseViewModel> items) {
-
+        Log.d(TAG, "setItems");
     }
 
     @Override
@@ -332,6 +331,11 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     }
 
     @Override
+    public void setItemsCIty(List<Geoname> items) {
+        Log.d(TAG, "Size list of geoname: " + items.size());
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
@@ -342,6 +346,6 @@ public class ScrollActivity extends BaseActivity implements BaseView {
         super.onResume();
         Log.d(TAG, "onResume");
         setUpDrawer();
-        loadCurrentData();
+        mForecastPresenter.loadStartCurrent(true);
     }
 }
