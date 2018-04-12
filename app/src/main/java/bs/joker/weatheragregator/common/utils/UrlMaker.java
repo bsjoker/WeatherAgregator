@@ -33,4 +33,11 @@ public class UrlMaker {
         Log.d(LOG_TAG, "URL: " + newUrl);
         return newUrl;
     }
+
+    public static String getUrlCityKeyAW(String mUrl, String mLat, String mLng){
+        String newUrl;
+        newUrl = mUrl.replace("{lat},{lng}", mLat + "," + mLng);
+        Log.d(LOG_TAG, "URL: " + newUrl);
+        return newUrl;
+    }
 }

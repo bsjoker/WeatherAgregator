@@ -86,88 +86,13 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
                     .map(charSequence -> charSequence == null ? null : charSequence.toString().trim())
                     //.throttleLast(100, TimeUnit.MILLISECONDS)
                     .debounce(400, TimeUnit.MILLISECONDS)
-//                    .switchMap(new Function<String, ObservableSource<Geoname>>() {
-//                        @Override
-//                        public ObservableSource<Geoname> apply(String query) throws Exception {
-//                            geonameList.clear();
-//                            return mForecastPresenter.onCreateLoadDataObservableGeoNames(query);
-//                        }
-//                    })
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(searchText -> {
                         mForecastPresenter.loadStartCity(searchText);
-                        //searchCityFragment.mSearchRecyclerViewAdapter.getFilter().filter(searchText.getName());
-                        //searchCityFragment.setData(geonameList);});
-//                    .subscribe(new Consumer<Geoname>() {
-//                        @Override
-//                        public void accept(Geoname geoname) throws Exception {
-//                            Log.d(TAG, geoname.getName());
-//
-//                            geonameList.add(geoname);
-//                            Log.d(TAG, "Quantity: " + geonameList.size());
-//                            searchCityFragment.mSearchRecyclerViewAdapter.getFilter().filter(geoname.getName());
-//                            searchCityFragment.setData(geonameList);
-//                        }
-//                    });
                     });
         }
             return super.onOptionsItemSelected(item);
         }
-
-//        if (id == R.id.action_search){
-//            SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-//            RxSearchView.queryTextChanges(searchView)
-//                    .map(charSequence -> charSequence == null ? null : charSequence.toString().trim())
-//                    .throttleLast(100, TimeUnit.MILLISECONDS)
-//                    .debounce(100, TimeUnit.MILLISECONDS)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(searchText -> searchCityFragment.mSearchRecyclerViewAdapter.getFilter().filter(searchText));
-//            return true;
-//        }
-
-//            SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-//            RxSearchObservable.fromView(searchView)
-//                    .debounce(500, TimeUnit.MILLISECONDS)
-////                    .filter(new Predicate<String>() {
-////                        @Override
-////                        public boolean test(String s) throws Exception {
-////                            if (s.isEmpty()){
-////                                Log.d(TAG, "Is_Empty");
-////                                //searchCityFragment.setData(null);
-////                                return false;
-////                            }else {
-////                                Log.d(TAG, "Is_NOT_Empty");
-////                                return true;
-////                            }
-////                        }
-////                    })
-////                    .distinctUntilChanged()
-//                    .switchMap(new Function<String, ObservableSource<Geoname>>() {
-//                        @Override
-//                        public ObservableSource<Geoname> apply(String query) throws Exception {
-//                            geonameList.clear();
-//                            return mForecastPresenter.onCreateLoadDataObservableGeoNames(query);
-//                        }
-//                    })
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Consumer<Geoname>() {
-//                        @Override
-//                        public void accept(Geoname geoname) throws Exception {
-//                            Log.d(TAG, geoname.getName());
-//
-//                            geonameList.add(geoname);
-//                            Log.d(TAG, "Quantity: " + geonameList.size());
-//                            searchCityFragment.setData(geonameList);
-//                        }
-//                    });
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    public static void getListCities(String query){
-//        mForecastPresenter.onCreateLoadDataObservableGeoNames(query);
-//    }
 
     @Override
     public void showError(String message) {
@@ -177,6 +102,12 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
     @Override
     public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
 
+    }
+
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+        Log.d(TAG, "City Key AW To Database: " + key);
+        searchCityFragment.setCityKeyAW(key);
     }
 
     @Override

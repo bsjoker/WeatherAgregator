@@ -37,6 +37,7 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
         this.mDescriptionCode = (Integer.parseInt(hourlyForecastWunderground.getFctcode()));
         this.precipation = hourlyForecastWunderground.getPop() + "%";
 
+        Log.d("ForecastHourlyIVM", "Num: " + hourlyForecastWunderground.getTemp().getMetric());
         this.mWindSpeed = hourlyForecastWunderground.getWspd().getMetric();
         this.mTemp = hourlyForecastWunderground.getTemp().getMetric();
         this.mDay = DayNight.isDay(Long.valueOf(hourlyForecastWunderground.getFCTTIME().getEpoch())*1000L);
@@ -46,7 +47,6 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
         this.mTimeDate = new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(hourlyForecastAccuweather.getEpochDateTime()*1000L));
         this.mDescriptionWeather = hourlyForecastAccuweather.getIconPhrase();
         this.mWindDirection = hourlyForecastAccuweather.getWind().getDirection().getLocalized();
-        Log.d("ForecastHourlyIVM", "Num: " + hourlyForecastAccuweather.getWeatherIcon());
         this.mDescriptionCode = ConvertDescriptionCode.convertCodeAW(hourlyForecastAccuweather.getWeatherIcon());
         this.precipation = hourlyForecastAccuweather.getPrecipitationProbability() + "%";
 

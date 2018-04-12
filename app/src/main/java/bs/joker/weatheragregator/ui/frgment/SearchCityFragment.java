@@ -44,6 +44,8 @@ public class SearchCityFragment extends BaseSearchCityFragment {
     @BindView(R.id.rv_city_search_list)
     RecyclerView mRecyclerView;
 
+    private Geoname clickedGeoname;
+    private Integer cityKeyAW;
     private Unbinder mUnbinder;
     private List<Geoname> data;
 
@@ -95,16 +97,25 @@ public class SearchCityFragment extends BaseSearchCityFragment {
             @Override
             public void onItemClick(View v, int position) {
                 Log.d("BaseSearch", "Clicked: " + data.get(position).getName());
+                mBasePresenter.loadStartCityKeyAW(data.get(position).getLat(), data.get(position).getLng());
+
                 try {
                     PreferencesHelper.savePreference("CurrentCity", data.get(position).getName());
                 } catch (InvalidClassException e) {
                     e.printStackTrace();
                 }
-                saveToDb(data.get(position));
+                clickedGeoname = new Geoname();
+                clickedGeoname = data.get(position);
+                //Log.d("BaseSearch", "CityKeyOnView: " + cityKeyAW);
+
                 getActivity().finish();
             }
         });
         mRecyclerView.setAdapter(mSearchRecyclerViewAdapter);
+    }
+
+    public void clickCity(Geoname geoname){
+
     }
 
     public void saveToDb(RealmObject item) {
@@ -119,10 +130,24 @@ public class SearchCityFragment extends BaseSearchCityFragment {
         mSearchRecyclerViewAdapter.setItems(data);
     }
 
+    public void setCityKeyAW(String cityKeyAW){
+        this.cityKeyAW = Integer.valueOf(cityKeyAW);
+        Log.d("BaseSearch", "CityKey: " + cityKeyAW);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+        this.cityKeyAW = Integer.valueOf(key);
+        clickedGeoname.setCityKeyAW(cityKeyAW);
+        saveToDb(clickedGeoname);
+        Log.d("BaseSearch", "Message: " + cityKeyAW);
+
     }
 
     @Override

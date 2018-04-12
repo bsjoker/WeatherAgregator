@@ -67,6 +67,8 @@ public class BaseActivity extends MvpAppCompatActivity {
     TextView temperature;
     @BindView(R.id.tv_time_last_update)
     TextView tv_time_last_update;
+    @BindView(R.id.wind)
+    TextView wind;
     @BindView(R.id.icon_cond)
     ImageView icon_cond;
     @BindView(R.id.tv_condition)
@@ -109,7 +111,7 @@ public class BaseActivity extends MvpAppCompatActivity {
     }
 
     public void fragmentOnScreen(BaseFragment currentFragment) {
-
+Log.d(LOG_TAG, "fragmentOnScreen");
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {

@@ -1,6 +1,7 @@
 package bs.joker.weatheragregator.ui.frgment;
 
 import android.text.format.Time;
+import android.util.Log;
 
 import java.util.List;
 
@@ -81,6 +82,8 @@ public abstract class BaseSearchCityFragment extends BaseFragmentSearch implemen
     public void setItemsCIty(List<Geoname> items) {
 
     }
+
+
 
     protected abstract BasePresenter onCreateBasePresenter();
 }

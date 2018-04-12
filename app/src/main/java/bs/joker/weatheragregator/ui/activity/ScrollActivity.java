@@ -143,6 +143,13 @@ public class ScrollActivity extends BaseActivity implements BaseView {
 
         mDrawer.addItems(new DividerDrawerItem(), item1);
 
+        Long selectedCity = PreferencesHelper.getSharedPreferences().getLong("SelectCity", 100L);
+
+        if (selectedCity != 100) {
+            mDrawer.setSelection(selectedCity);
+        } else {
+            Log.d(TAG, "SelectedCity: " + selectedCity);
+        }
         mDrawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -159,13 +166,12 @@ public class ScrollActivity extends BaseActivity implements BaseView {
                         PreferencesHelper.savePreference("ChangeCityHourly", true);
                         PreferencesHelper.savePreference("ChangeCityDaily", true);
                         PreferencesHelper.savePreference("ChangeCityWeekly", true);
+                        PreferencesHelper.savePreference("SelectCity", drawerItem.getIdentifier());
                     } catch (InvalidClassException e) {
                         e.printStackTrace();
                     }
+
                     mForecastPresenter.loadStartCurrent(true);
-//                    mForecastPresenter.loadStart(true);
-//                    mForecastPresenter.loadStartDaily(true);
-//                    mForecastPresenter.loadStartWeekly(true);
                     setAdapter();
                     Log.d(TAG, "Name: " + String.valueOf(((PrimaryDrawerItem) drawerItem).getName()));
                 }
@@ -196,9 +202,12 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     @Override
     public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
         Log.d(TAG, "Current cond: " + currentTime);
+
         int temp = (int)Math.round(currentCond.getTempC());
+        int windspeed = (int)Math.round(currentCond.getWindKph()*0.28);
         temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
         tv_time_last_update.setText("Обновлено в " + currentTime.format("%H:%M"));
+        wind.setText("Ветер: " + windspeed + " м/с");
         boolean isDay = DayNight.isDay(currentTime.toMillis(false));
 
         collapsing_toolbar_layout.setTitle(mAccountHeader.getActiveProfile().getName().getText());
@@ -333,6 +342,11 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     @Override
     public void setItemsCIty(List<Geoname> items) {
         Log.d(TAG, "Size list of geoname: " + items.size());
+    }
+
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+        Log.d(TAG, "CityKey: " + key);
     }
 
     @Override

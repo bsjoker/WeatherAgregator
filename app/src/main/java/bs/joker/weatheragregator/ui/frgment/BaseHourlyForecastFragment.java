@@ -204,6 +204,11 @@ public static final String TAG = "BaseHourlFragment";
         mHourlyForecastAdapterDS.setItems(items);
     }
 
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+
+    }
+
     public void refresh(){
         Log.d(TAG, "refresh");
     }

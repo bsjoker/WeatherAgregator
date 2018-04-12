@@ -16,6 +16,7 @@ import bs.joker.weatheragregator.common.utils.ListHelper;
 import bs.joker.weatheragregator.common.utils.SetID;
 import bs.joker.weatheragregator.common.utils.UrlMaker;
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
+import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
 import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
@@ -57,6 +58,15 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
         {
             //Log.d(LOG_TAG, "ObservableCurrentWU: " + hourlyCurrentWunderground.currentData.getIcon());
             return io.reactivex.Observable.just(sunPhase.astronomyData);
+        });
+    }
+
+    public Observable<CityKey> onCreateLoadCityKeyObservableAccuweather(String lat, String lng) {
+        //Log.d(LOG_TAG, "ObservableAstronomyWU");
+        return mWeatherApi.getCityKeyAccuweather(UrlMaker.getUrlCityKeyAW(ApiMethods.CITY_KEY_ACCUWEATHER, lat, lng)).flatMap(cityKey ->
+        {
+            //Log.d(LOG_TAG, "ObservableCurrentWU: " + hourlyCurrentWunderground.currentData.getIcon());
+            return io.reactivex.Observable.just(cityKey);
         });
     }
 
@@ -123,7 +133,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservableHourlyDS() {
         Log.d(LOG_TAG, "ObservableHourlyDS");
         final int[] i = {1};
-        return mWeatherApi.getForecastDS(ApiMethods.HOURLY_DARKSKY).flatMap(hourlyForecastDarkskyResponse ->
+        return mWeatherApi.getForecastDS(UrlMaker.getUrl(ApiMethods.HOURLY_DARKSKY)).flatMap(hourlyForecastDarkskyResponse ->
                 Observable.fromIterable(hourlyForecastDarkskyResponse.hourly_forecast_ds.data)
         )
                 .skip(1)
@@ -185,7 +195,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservableDaily5DS() {
         Log.d(LOG_TAG, "ObservableDaily5DS");
         final int[] i = {1};
-        return mWeatherApi.getDaily5ForecastDS(ApiMethods.DAILY_5_DARKSKY).flatMap(daily5ForecastDarkskyResponse ->
+        return mWeatherApi.getDaily5ForecastDS(UrlMaker.getUrl(ApiMethods.DAILY_5_DARKSKY)).flatMap(daily5ForecastDarkskyResponse ->
                 //Observable.fromIterable(ListHelper.getForecastListDS(hourlyForecastDarkskyResponse.hourly_forecast_ds))
                 Observable.fromIterable(daily5ForecastDarkskyResponse.daily5forecastDS.data)
         )
@@ -233,7 +243,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
                 Observable.fromIterable(daily5ForecastAccuWeatherResponse.daily5forecastAW)
         )
                 .doOnNext(weeklyForecastAccuWeather -> {
-                    weeklyForecastAccuWeather.setId(i[0]);
+                    weeklyForecastAccuWeather = SetID.setIDDaily5AW(weeklyForecastAccuWeather, i[0]);
                     saveToDb(weeklyForecastAccuWeather);
                     i[0]++;
                 })
@@ -248,7 +258,7 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
     public Observable<BaseViewModel> onCreateLoadDataObservableWeeklyDS() {
         Log.d(LOG_TAG, "ObservableWeeklyDS");
         final int[] i = {1};
-        return mWeatherApi.getDaily5ForecastDS(ApiMethods.DAILY_5_DARKSKY).flatMap(daily5ForecastDarkskyResponse ->
+        return mWeatherApi.getDaily5ForecastDS(UrlMaker.getUrl(ApiMethods.DAILY_5_DARKSKY)).flatMap(daily5ForecastDarkskyResponse ->
                 Observable.fromIterable(daily5ForecastDarkskyResponse.daily5forecastDS.data)
         )
                 .skip(1)

@@ -19,6 +19,7 @@ public interface BaseView extends MvpView {
 //    void hideListProgress();
     void showError(String message);
     void setCurrentCond(CurrentObservation currentCond, Time currentTime);
+    void setCityKeyAWToDatabase(String key);
     void setItems(List<BaseViewModel> items);
     void setItemsAW(List<BaseViewModel> items);
     void setItemsDS(List<BaseViewModel> items);

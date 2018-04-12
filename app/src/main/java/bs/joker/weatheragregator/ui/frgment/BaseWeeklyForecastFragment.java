@@ -206,5 +206,10 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
 
     }
 
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+
+    }
+
     protected abstract BasePresenter onCreateBasePresenter();
 }

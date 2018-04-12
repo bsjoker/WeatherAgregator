@@ -62,9 +62,9 @@ public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemV
 
     @Override
     public void bindViewHolder(ForecastHourlyItemViewModel items) {
-        final String img_Directoin = "ЮВ";
+        Log.d("VH", "bindHourlyVH");
+        Log.d("VH", "temp: " + items.getTemp());
         final String notation = "metric";
-        String unit;
         int wind_speed;
         time_date_text_view.setText(items.getTimeDate());
         description_weather_text_view.setText(items.getDescriptionWeather());

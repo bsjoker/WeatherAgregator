@@ -45,5 +45,4 @@ public class Full<T> {
     @SerializedName("geonames")
     @Expose
     public List<T> geonames_list;
-
 }

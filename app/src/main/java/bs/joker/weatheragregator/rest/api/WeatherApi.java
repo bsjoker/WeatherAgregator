@@ -3,6 +3,7 @@ package bs.joker.weatheragregator.rest.api;
 import java.util.List;
 
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
+import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
 import bs.joker.weatheragregator.rest.model.response.AstronomyWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.CurrentWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastAccuWeatherResponse;
@@ -14,7 +15,6 @@ import bs.joker.weatheragregator.rest.model.response.HourlyForecastWundergroundR
 import bs.joker.weatheragregator.rest.model.response.WeeklyForecastWundergroundResponse;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 /**
@@ -28,6 +28,9 @@ public interface WeatherApi {
 
     @GET()
     Observable<AstronomyWundergroundResponse> getAstronomyWU(@Url String url);
+
+    @GET()
+    Observable<CityKey> getCityKeyAccuweather(@Url String url);
 
     @GET()
     Observable<CurrentWundergroundResponse> getCurrentWU(@Url String url);

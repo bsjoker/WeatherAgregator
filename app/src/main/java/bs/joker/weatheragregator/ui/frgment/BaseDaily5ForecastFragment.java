@@ -209,6 +209,11 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
 
     }
 
+    @Override
+    public void setCityKeyAWToDatabase(String key) {
+
+    }
+
     protected abstract BasePresenter onCreateBasePresenter();
 }
 
