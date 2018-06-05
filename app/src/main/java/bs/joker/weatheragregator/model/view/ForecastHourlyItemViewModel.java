@@ -8,6 +8,7 @@ import android.text.format.Time;
 import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
 import bs.joker.weatheragregator.common.utils.DayNight;
 import bs.joker.weatheragregator.common.utils.DirectionWind;
+import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
 import bs.joker.weatheragregator.model.wunderground.HourlyForecastWunderground;
@@ -37,9 +38,19 @@ public class ForecastHourlyItemViewModel extends BaseViewModel {
         this.mDescriptionCode = (Integer.parseInt(hourlyForecastWunderground.getFctcode()));
         this.precipation = hourlyForecastWunderground.getPop() + "%";
 
-        Log.d("ForecastHourlyIVM", "Num: " + hourlyForecastWunderground.getTemp().getMetric());
-        this.mWindSpeed = hourlyForecastWunderground.getWspd().getMetric();
-        this.mTemp = hourlyForecastWunderground.getTemp().getMetric();
+        if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
+            Log.d("ForecastHourlyIVM", "Num: " + hourlyForecastWunderground.getTemp().getMetric());
+            this.mWindSpeed = hourlyForecastWunderground.getWspd().getMetric();
+            this.mTemp = hourlyForecastWunderground.getTemp().getMetric();
+        } else {
+            Log.d("ForecastHourlyIVM", "Num: " + hourlyForecastWunderground.getTemp().getEnglish());
+            Double t = Double.valueOf(hourlyForecastWunderground.getTemp().getEnglish());
+
+            this.mWindSpeed = hourlyForecastWunderground.getWspd().getEnglish();
+
+            this.mTemp = String.valueOf((int) Math.round(t));
+        }
+
         this.mDay = DayNight.isDay(Long.valueOf(hourlyForecastWunderground.getFCTTIME().getEpoch())*1000L);
     }
 

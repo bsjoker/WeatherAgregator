@@ -9,13 +9,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
-
+import android.view.View;
+import android.widget.TextView;
 
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
 import bs.joker.weatheragregator.common.manager.MyFragmentManager;
+import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
@@ -31,6 +34,7 @@ import bs.joker.weatheragregator.mvp.view.BaseView;
 import bs.joker.weatheragregator.ui.frgment.SearchCityFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
@@ -42,6 +46,11 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.tvNote)
+    TextView mNote;
+
+    private Unbinder mUnbinder;
 
     SearchCityFragment searchCityFragment;
 
@@ -55,12 +64,25 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
         MyApplication.getApplicationComponent().inject(this);
 
         setContentView(R.layout.search_activity);
-        ButterKnife.bind(this);
+
+        try {
+            PreferencesHelper.savePreference("lang", this.getResources().getConfiguration().locale.getLanguage());
+        } catch (InvalidClassException e) {
+            e.printStackTrace();
+        }
+
+        mUnbinder = ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
         }
 
         searchCityFragment = (SearchCityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -78,19 +100,16 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //List<Geoname> geonameList = new ArrayList<>();
-        if (id == R.id.action_search) {
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
             RxSearchView.queryTextChanges(searchView)
                     .map(charSequence -> charSequence == null ? null : charSequence.toString().trim())
                     //.throttleLast(100, TimeUnit.MILLISECONDS)
-                    .debounce(400, TimeUnit.MILLISECONDS)
+                    .debounce(200, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(searchText -> {
+                        mNote.setVisibility(View.GONE);
                         mForecastPresenter.loadStartCity(searchText);
                     });
-        }
             return super.onOptionsItemSelected(item);
         }
 
@@ -111,53 +130,14 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
     }
 
     @Override
-    public void setItems(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5AW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5DS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyWU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
     public void setItemsCIty(List<Geoname> items) {
         Log.d(TAG, "Size list of geoname: " + items.size());
         searchCityFragment.setData(items);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUnbinder.unbind();
     }
 }

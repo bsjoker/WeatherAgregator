@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
+import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.view.ForecastWeeklyItemViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +22,7 @@ public class ForecastWeeklyViewHolder extends BaseViewHolder<ForecastWeeklyItemV
 
     private Resources mResources;
     private Context mContext;
+    private Boolean metric;
 
     @BindView(R.id.day_of_week_tv)
     public TextView dayOfWeek;
@@ -38,12 +40,6 @@ public class ForecastWeeklyViewHolder extends BaseViewHolder<ForecastWeeklyItemV
         super(itemView);
 
         ButterKnife.bind(this, itemView);
-
-//        dayOfWeek = (TextView)itemView.findViewById(R.id.day_of_week_tv);
-//        description = (TextView) itemView.findViewById(R.id.description_tv);
-//        tempMax = (TextView) itemView.findViewById(R.id.temp_max_tv);
-//        tempMin = (TextView) itemView.findViewById(R.id.temp_min_tv);
-//        icon = (ImageView) itemView.findViewById(R.id.weather_icon_iv);
 
         MyApplication.getApplicationComponent().inject(this);
 

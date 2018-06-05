@@ -10,8 +10,10 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.InvalidClassException;
 import java.util.List;
 
 import bs.joker.weatheragregator.R;
@@ -22,8 +24,10 @@ import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
+import bs.joker.weatheragregator.mvp.presenter.BaseHourlyPresenter;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
+import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,7 +36,7 @@ import butterknife.Unbinder;
  * Created by bakays on 20.10.2017.
  */
 
-public abstract class BaseHourlyForecastFragment extends BaseFragment implements BaseView {
+public abstract class BaseHourlyForecastFragment extends BaseFragment implements HourlyForecastView {
 public static final String TAG = "BaseHourlFragment";
 
     @BindView(R.id.forecast_weather_recycler_view_wu)
@@ -51,13 +55,20 @@ public static final String TAG = "BaseHourlFragment";
     @BindView(R.id.divider_wu)
     ImageView divider;
 
+    @BindView(R.id.progressBarWU)
+    ProgressBar mProgressBarWU;
+    @BindView(R.id.progressBarAW)
+    ProgressBar mProgressBarAW;
+    @BindView(R.id.progressBarDS)
+    ProgressBar mProgressBarDS;
+
     private Unbinder mUnbinder;
 
     HourlyForecastAdapter mHourlyForecastAdapter;
     HourlyForecastAdapterAW mHourlyForecastAdapterAW;
     HourlyForecastAdapterDS mHourlyForecastAdapterDS;
 
-    protected BasePresenter mBasePresenter;
+    protected BaseHourlyPresenter mBaseHourlyPresenter;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -71,17 +82,16 @@ public static final String TAG = "BaseHourlFragment";
 
         Long last_up = PreferencesHelper.getSharedPreferences().getLong("lastUpdateHourly", 0l);
 
-        boolean update = ((curTime.toMillis(false) - last_up)>900000l);
+        boolean update = ((curTime.toMillis(false) - last_up)>3600000l);
         Log.d(TAG, "State: " + update + ". CurTime: " + curTime.toMillis(false) + ". Last_up: " + last_up + ". Minus: " + (curTime.toMillis(false) - last_up));
 
-        mBasePresenter = onCreateBasePresenter();
+        mBaseHourlyPresenter = onCreateBasePresenter();
 
         if (PreferencesHelper.getSharedPreferences().getBoolean("ChangeCityHourly", false)) {
             update = true;
         }
         Log.d(TAG, "State: " + update);
-        mBasePresenter.loadStart(update);
-        //mBasePresenter.loadStart(true);
+        mBaseHourlyPresenter.loadStart(update);
 
         logo_wu.setImageResource(R.drawable.wunderground_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
@@ -92,9 +102,7 @@ public static final String TAG = "BaseHourlFragment";
         mRecyclerViewDS.setHasFixedSize(true);
 
         setUpRecyclerView(view);
-        setUpAdapret(mRecyclerViewWU);
-        setUpAdapret(mRecyclerViewAW);
-        setUpAdapret(mRecyclerViewDS);
+        setUpAdapret();
     }
 
     private void setUpRecyclerView(View view) {
@@ -109,7 +117,7 @@ public static final String TAG = "BaseHourlFragment";
         mRecyclerViewDS.setItemAnimator(new DefaultItemAnimator());
     }
 
-    public void setUpAdapret(RecyclerView recyclerView) {
+    public void setUpAdapret() {
         mHourlyForecastAdapter = new HourlyForecastAdapter();
         mRecyclerViewWU.setAdapter(mHourlyForecastAdapter);
         mHourlyForecastAdapterAW = new HourlyForecastAdapterAW();
@@ -141,16 +149,6 @@ public static final String TAG = "BaseHourlFragment";
     }
 
     @Override
-    public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
-        Log.d(TAG, "Current cond");
-    }
-
-    @Override
     public void setItems(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapter.setItems(items);
@@ -168,62 +166,56 @@ public static final String TAG = "BaseHourlFragment";
         mHourlyForecastAdapterDS.setItems(items);
     }
 
+
     @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
-        Log.d(TAG, "SizeD5WU: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
+    public void showListProgress(int n) {
+        switch (n){
+            case 1:
+                mProgressBarWU.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressWU");
+                break;
+            case 2:
+                mProgressBarAW.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressAW");
+                break;
+            case 3:
+                mProgressBarDS.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressDS");
+                break;
+            default:
+                Log.d(TAG, "Default.");
+        }
     }
 
     @Override
-    public void setItemsD5AW(List<BaseViewModel> items) {
-        Log.d(TAG, "SizeD5AW: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
+    public void hideListProgress(int n) {
+        switch (n) {
+            case 1:
+                mProgressBarWU.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressWU");
+                break;
+            case 2:
+                mProgressBarAW.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressAW");
+                break;
+            case 3:
+                mProgressBarDS.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressDS");
+                break;
+            default:
+                Log.d(TAG, "Default.");
+        }
     }
 
     @Override
-    public void setItemsD5DS(List<BaseViewModel> items) {
-        Log.d(TAG, "SizeD5DS: " + items.size());
-        mHourlyForecastAdapterDS.setItems(items);
-    }
-
-    @Override
-    public void setItemsWeeklyWU(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
-    }
-
-    @Override
-    public void setItemsWeeklyAW(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
-    }
-
-    @Override
-    public void setItemsWeeklyDS(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapterDS.setItems(items);
-    }
-
-    @Override
-    public void setCityKeyAWToDatabase(String key) {
-
+    public void showError(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     public void refresh(){
+        mBaseHourlyPresenter.loadStart(true);
         Log.d(TAG, "refresh");
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "OnStart");
-    }
-
-    @Override
-    public void setItemsCIty(List<Geoname> items) {
-        Log.d(TAG, "Size city: " + items.size());
-    }
-
-    protected abstract BasePresenter onCreateBasePresenter();
+    protected abstract BaseHourlyPresenter onCreateBasePresenter();
 }

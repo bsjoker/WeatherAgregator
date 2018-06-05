@@ -1,11 +1,13 @@
 package bs.joker.weatheragregator.ui.holder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
@@ -43,6 +45,8 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
     Integer icon;
 
     private Context mContext;
+    private Resources mResources;
+    private Boolean metric;
 
     public ForecastDaily5ViewHolder(View itemView) {
         super(itemView);
@@ -51,16 +55,24 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
 
         MyApplication.getApplicationComponent().inject(this);
 
+        metric = PreferencesHelper.getSharedPreferences().getBoolean("metric", true);
+
         String sp = PreferencesHelper.getSharedPreferences().getString("111", "Error");
         Log.d("FD5VH", "SharedPrefs: " + sp);
         mContext = itemView.getContext();
+        mResources = mContext.getResources();
     }
 
     @Override
     public void bindViewHolder(ForecastDaily5ItemViewModel items) {
         date_tv.setText(items.getDate_tv());
-        temp_max.setText(items.getTemp_max());
-        temp_min.setText(items.getTemp_min());
+        if (metric) {
+            temp_max.setText(items.getTemp_max() + mResources.getString(R.string.degrees) + mResources.getString(R.string.Celcius));
+            temp_min.setText(items.getTemp_min() + mResources.getString(R.string.degrees) + mResources.getString(R.string.Celcius));
+        }else {
+            temp_max.setText(items.getTemp_max() + mResources.getString(R.string.degrees) + mResources.getString(R.string.Farengeit));
+            temp_min.setText(items.getTemp_min() + mResources.getString(R.string.degrees) + mResources.getString(R.string.Farengeit));
+        }
         description_day.setText(items.getDescription_day());
         description_night.setText(items.getDescription_night());
         icon_day.setImageResource(getIcon(items.getIcon_day(), true));

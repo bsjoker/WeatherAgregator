@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
+import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.view.ForecastHourlyItemViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,9 +36,6 @@ public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemV
     @BindView(R.id.weather_icon_image_view)
     public ImageView weather_icon_image_view;
 
-//    TextView time_date_text_view, description_weather_text_view, precipation, wind_speed_text_view, wind_direction_text_view, temp_text_view;
-//    ImageView weather_icon_image_view;
-
     private Resources mResources;
     private Context mContext;
 
@@ -45,14 +43,6 @@ public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemV
         super(itemView);
 
         ButterKnife.bind(this, itemView);
-
-        //time_date_text_view = (TextView) itemView.findViewById(R.id.time_date_text_view);
-        //description_weather_text_view = (TextView) itemView.findViewById(R.id.description_weather_text_view);
-        //weather_icon_image_view = (ImageView) itemView.findViewById(R.id.weather_icon_image_view);
-        //precipation = (TextView) itemView.findViewById(R.id.precipation);
-        //wind_speed_text_view = (TextView) itemView.findViewById(R.id.wind_speed_text_view);
-        //wind_direction_text_view = (TextView) itemView.findViewById(R.id.wind_direction_text_view);
-        //temp_text_view = (TextView) itemView.findViewById(R.id.temp_text_view);
 
         MyApplication.getApplicationComponent().inject(this);
 
@@ -155,13 +145,15 @@ public class ForecastHourlyViewHolder extends BaseViewHolder<ForecastHourlyItemV
                 break;
         }
 
-        if (notation.contains("metric")) {
+        if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
             wind_speed = (int) (Double.valueOf(items.getWindSpeed()) * 0.28);
             wind_speed_text_view.setText(wind_speed + " " + mResources.getString(R.string.speed_metric));
             wind_direction_text_view.setText(" - " + items.getWindDirection());
             temp_text_view.setText(items.getTemp() + mResources.getString(R.string.degrees));
         } else {
-            wind_speed_text_view.setText(items.getWindSpeed() + " " + mResources.getString(R.string.speed_english));
+            //Double wSpd = Double.valueOf(items.getWindSpeed());
+            wind_speed = (int)Math.round (Double.valueOf(items.getWindSpeed()));
+            wind_speed_text_view.setText(wind_speed + " " + mResources.getString(R.string.speed_english));
             wind_direction_text_view.setText(" - " + items.getWindDirection());
             temp_text_view.setText(items.getTemp() + mResources.getString(R.string.degrees));
         }

@@ -11,7 +11,9 @@ import javax.inject.Inject;
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
+import bs.joker.weatheragregator.mvp.presenter.BaseWeeklyPresenter;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
+import bs.joker.weatheragregator.mvp.presenter.WeeklyForecastPresenter;
 import bs.joker.weatheragregator.rest.api.WeatherApi;
 
 /**
@@ -28,7 +30,7 @@ public class WeeklyForecastFragment extends BaseWeeklyForecastFragment {
     WeatherApi mWeatherApi;
 
     @InjectPresenter
-    ForecastPresenter mForecastPresenter;
+    WeeklyForecastPresenter mWeeklyForecastPresenter;
 
     public static WeeklyForecastFragment newInstance(int pos){
         WeeklyForecastFragment weeklyForecastFragment = new WeeklyForecastFragment();
@@ -52,7 +54,7 @@ public class WeeklyForecastFragment extends BaseWeeklyForecastFragment {
     }
 
     @Override
-    protected BasePresenter onCreateBasePresenter() {
-        return mForecastPresenter;
+    protected BaseWeeklyPresenter onCreateBasePresenter() {
+        return mWeeklyForecastPresenter;
     }
 }

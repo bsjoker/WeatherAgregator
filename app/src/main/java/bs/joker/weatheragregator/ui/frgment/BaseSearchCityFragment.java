@@ -19,10 +19,6 @@ public abstract class BaseSearchCityFragment extends BaseFragmentSearch implemen
 
     protected BasePresenter mBasePresenter;
 
-
-
-
-
     @Override
     public void showError(String message) {
 
@@ -34,56 +30,9 @@ public abstract class BaseSearchCityFragment extends BaseFragmentSearch implemen
     }
 
     @Override
-    public void setItems(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5AW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5DS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyWU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
     public void setItemsCIty(List<Geoname> items) {
 
     }
-
-
 
     protected abstract BasePresenter onCreateBasePresenter();
 }

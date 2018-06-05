@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Погодный агрегатор</string>
+    <string name="footerDM">Для удаления города из списка\nнажмите и удерживайте на нём несколько секунд.</string>
+    <string name="search_hint">Для поиска города нажмите на значек\nпоиска и введите название города.</string>
+    <string name="search_activity_name">Найти город</string>
+    <string name="action_unit">Метрическая/Английская</string>
+    <string name="action_refresh">Refresh</string>
+
+    <string name="lastUpdate">Обновлено в </string>
+    <string name="windSpeed">Ветер: </string>
+
+    <string name="speed_metric">м/с</string>
+    <string name="speed_english">миль/ч</string>
+    <string name="degrees">°</string>
+    <string name="Celcius">C</string>
+    <string name="Farengeit">F</string>
+    <string name="day">День</string>
+    <string name="night">Ночь</string>
+    <array name="names_tab">
+        <item>Почасовой</item>
+        <item>5 дней</item>
+        <item>Неделя</item>
+    </array>
+
+    <array name="description">
+        <item>Ясно</item>
+        <item>Переменная облачность</item>
+        <item>Облачно</item>
+        <item>Дождь</item>
+        <item>Дождь со снегом</item>
+        <item>Снег</item>
+        <item>Ветер</item>
+        <item>Туман</item>
+        <item>Нет данных</item>
+    </array>
+
+    <string name="clear">Ясно</string>
+    <string name="partly_cloudy">Переменная облачность</string>
+    <string name="cloudy">Облачно</string>
+    <string name="rainAW">Дождь</string>
+    <string name="sleet">Дождь со снегом</string>
+    <string name="snowD5AW">Снег</string>
+    <string name="windAW">Ветер</string>
+    <string name="fog">Туман</string>
+    <string name="na">Нет данных</string>
+
+    <string name="screen_name_news">Добавить город</string>
+</resources>

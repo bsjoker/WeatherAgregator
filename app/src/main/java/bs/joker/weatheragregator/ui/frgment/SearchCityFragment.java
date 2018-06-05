@@ -4,6 +4,7 @@ package bs.joker.weatheragregator.ui.frgment;
  * Created by 1 on 13.03.2018.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -34,8 +36,6 @@ import bs.joker.weatheragregator.ui.activity.ScrollActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.realm.Realm;
-import io.realm.RealmObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +43,7 @@ import io.realm.RealmObject;
 public class SearchCityFragment extends BaseSearchCityFragment {
     @BindView(R.id.rv_city_search_list)
     RecyclerView mRecyclerView;
+
 
     private Geoname clickedGeoname;
     private Integer cityKeyAW;
@@ -59,7 +60,7 @@ public class SearchCityFragment extends BaseSearchCityFragment {
     @InjectPresenter
     ForecastPresenter mForecastPresenter;
 
-    public static SearchCityFragment newInstance(){
+    public static SearchCityFragment newInstance() {
         SearchCityFragment searchCityFragment = new SearchCityFragment();
         return searchCityFragment;
     }
@@ -75,14 +76,12 @@ public class SearchCityFragment extends BaseSearchCityFragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this,view);
-        mUnbinder = ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
 
         mBasePresenter = onCreateBasePresenter();
 
@@ -98,39 +97,37 @@ public class SearchCityFragment extends BaseSearchCityFragment {
             public void onItemClick(View v, int position) {
                 Log.d("BaseSearch", "Clicked: " + data.get(position).getName());
                 mBasePresenter.loadStartCityKeyAW(data.get(position).getLat(), data.get(position).getLng());
-
+                Log.d("BaseSearch", "After Clicked: " + data.get(position).getName());
                 try {
                     PreferencesHelper.savePreference("CurrentCity", data.get(position).getName());
+                    PreferencesHelper.savePreference("ChangeCityHourly", true);
+                    PreferencesHelper.savePreference("ChangeCityDaily", true);
+                    PreferencesHelper.savePreference("ChangeCityWeekly", true);
                 } catch (InvalidClassException e) {
                     e.printStackTrace();
                 }
+
                 clickedGeoname = new Geoname();
                 clickedGeoname = data.get(position);
                 //Log.d("BaseSearch", "CityKeyOnView: " + cityKeyAW);
-
-                getActivity().finish();
+                mBasePresenter.saveToDb(clickedGeoname);
             }
         });
         mRecyclerView.setAdapter(mSearchRecyclerViewAdapter);
     }
 
-    public void clickCity(Geoname geoname){
-
+    public void startScrollActivity(){
+        Intent intent = new Intent(getActivity(), ScrollActivity.class);
+        startActivity(intent);
     }
 
-    public void saveToDb(RealmObject item) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(item));
-        Log.d("BaseSearch", "saveToDb");
-    }
-
-    public void setData(List<Geoname> cityList){
+    public void setData(List<Geoname> cityList) {
         this.data = cityList;
         Log.d("BaseSearch", "BaseSearch: " + cityList.size());
         mSearchRecyclerViewAdapter.setItems(data);
     }
 
-    public void setCityKeyAW(String cityKeyAW){
+    public void setCityKeyAW(String cityKeyAW) {
         this.cityKeyAW = Integer.valueOf(cityKeyAW);
         Log.d("BaseSearch", "CityKey: " + cityKeyAW);
     }
@@ -145,9 +142,10 @@ public class SearchCityFragment extends BaseSearchCityFragment {
     public void setCityKeyAWToDatabase(String key) {
         this.cityKeyAW = Integer.valueOf(key);
         clickedGeoname.setCityKeyAW(cityKeyAW);
-        saveToDb(clickedGeoname);
+        clickedGeoname.setLangOfQuery(this.getResources().getConfiguration().locale.getLanguage());
+        mBasePresenter.saveToDb(clickedGeoname);
+        startScrollActivity();
         Log.d("BaseSearch", "Message: " + cityKeyAW);
-
     }
 
     @Override

@@ -1,5 +1,10 @@
 package bs.joker.weatheragregator.common.utils;
 
+import android.content.Context;
+
+import bs.joker.weatheragregator.R;
+import bs.joker.weatheragregator.ui.activity.ScrollActivity;
+
 /**
  * Created by bakays on 27.12.2017.
  */
@@ -114,36 +119,37 @@ public class ConvertDescriptionCode {
     }
 
     public static String convertDescriptionDS(String input){
+        Context context = ScrollActivity.link;
         String outputCode;
         switch (input){
             case "clear-day":
             case "clear-night":
-                outputCode = "Ясно";
+                outputCode = context.getResources().getString(R.string.clear);//"Ясно";
                 break;
             case "partly-cloudy-day":
             case "partly-cloudy-night":
-                outputCode = "Переменная облачность";
+                outputCode = context.getResources().getString(R.string.partly_cloudy);
                 break;
             case "cloudy":
-                outputCode = "Облачно";
+                outputCode = context.getResources().getString(R.string.cloudy);
                 break;
             case "rain":
-                outputCode = "Дождь";
+                outputCode = context.getResources().getString(R.string.rainAW);
                 break;
             case "sleet":
-                outputCode = "Дождь со снегом";
+                outputCode = context.getResources().getString(R.string.sleet);
                 break;
             case "snow":
-                outputCode = "Снег";
+                outputCode = context.getResources().getString(R.string.snowD5AW);
                 break;
             case "wind":
-                outputCode = "Ветер";
+                outputCode = context.getResources().getString(R.string.windAW);
                 break;
             case "fog":
-                outputCode = "Туман";
+                outputCode = context.getResources().getString(R.string.fog);
                 break;
             default:
-                outputCode = "Нет данных";
+                outputCode = context.getResources().getString(R.string.na);
                 break;
         }
         return outputCode;

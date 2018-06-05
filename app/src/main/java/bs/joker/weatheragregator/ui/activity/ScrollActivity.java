@@ -30,6 +30,7 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 
 import java.io.InvalidClassException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,9 @@ import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
+import bs.joker.weatheragregator.mvp.presenter.HourlyForecastPresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
+import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
 import bs.joker.weatheragregator.ui.frgment.BaseHourlyForecastFragment;
 import bs.joker.weatheragregator.ui.frgment.HourlyForecastFragment;
 import io.realm.Realm;
@@ -63,20 +66,19 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     private Drawer mDrawer;
     private AccountHeader mAccountHeader;
     private List<Geoname> cities;
-
-    BaseHourlyForecastFragment baseHourlyForecastFragment;
+    public static ScrollActivity link;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        link = this;
         MyApplication.getApplicationComponent().inject(this);
 
-        mForecastPresenter.loadStartAstronomy();
+        checkLangChange();
 
         setUpDrawer();
+        mForecastPresenter.loadStartAstronomy();
         loadCurrentData();
-
     }
 
     @Override
@@ -89,14 +91,87 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                //settings();
+            case R.id.action_unit:
+                if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)){
+                    try {
+                        Log.d(TAG, "Metric: " + true);
+                        PreferencesHelper.savePreference("metric", false);
+                        PreferencesHelper.savePreference("ChangeCityHourly", true);
+                        PreferencesHelper.savePreference("ChangeCityDaily", true);
+                        PreferencesHelper.savePreference("ChangeCityWeekly", true);
+                    } catch (InvalidClassException e) {
+                        e.printStackTrace();
+                    }
+                    mForecastPresenter.loadStartCurrent(true);
+                    setAdapter();
+                } else {
+                    try {
+                        Log.d(TAG, "Metric: " + false);
+                        PreferencesHelper.savePreference("metric", true);
+                        PreferencesHelper.savePreference("ChangeCityHourly", true);
+                        PreferencesHelper.savePreference("ChangeCityDaily", true);
+                        PreferencesHelper.savePreference("ChangeCityWeekly", true);
+                    } catch (InvalidClassException e) {
+                        e.printStackTrace();
+                    }
+                    mForecastPresenter.loadStartCurrent(true);
+                    setAdapter();
+                }
                 return true;
             case R.id.action_refresh:
-                loadCurrentData();
+                mForecastPresenter.loadStartCurrent(true);
+                setAdapter();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void checkLangChange() {
+        String langOld = PreferencesHelper.getSharedPreferences().getString("langOld", "en");
+        Log.d(TAG, langOld + "/" + this.getResources().getConfiguration().locale.getLanguage());
+        if (langOld.contains(this.getResources().getConfiguration().locale.getLanguage())) {
+            Log.d(TAG, "Lang don't change!");
+        } else {
+            Log.d(TAG, "Name changed!");
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(inRealm -> {
+                String currentCity = PreferencesHelper.getSharedPreferences().getString("CurrentCity", "");
+                Log.d(TAG, "CurCity: " + currentCity);
+                RealmResults<Geoname> realmResults = realm.where(Geoname.class).equalTo("name", currentCity).findAll();
+                try {
+                    PreferencesHelper.savePreference("CurrentCity", realmResults.get(0).getToponymName());
+                } catch (InvalidClassException e) {
+                    e.printStackTrace();
+                }
+            });
+            changeNameAndToponymName();
+            try {
+                PreferencesHelper.savePreference("langOld", this.getResources().getConfiguration().locale.getLanguage());
+                Log.d(TAG, "LangOld: " + this.getResources().getConfiguration().locale.getLanguage());
+            } catch (InvalidClassException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void changeNameAndToponymName() {
+        List<Geoname> newList = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(inRealm -> {
+
+            RealmResults<Geoname> realmResults = realm.where(Geoname.class).findAll();
+            for (Geoname geoname : realmResults) {
+                String name = geoname.getName();
+                String toponymName = geoname.getToponymName();
+                geoname.setName(toponymName);
+                geoname.setToponymName(name);
+                newList.add(geoname);
+            }
+        });
+
+        for (Geoname geoname : newList) {
+            mForecastPresenter.saveToDb(geoname);
         }
     }
 
@@ -113,13 +188,30 @@ public class ScrollActivity extends BaseActivity implements BaseView {
 
     public void setUpDrawer() {
         ProfileSettingDrawerItem item1 = new ProfileSettingDrawerItem().withIdentifier(1111).withName(R.string.screen_name_news)
-        .withIcon(GoogleMaterial.Icon.gmd_add);
+                .withIcon(GoogleMaterial.Icon.gmd_add);
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         RealmResults<Geoname> realmResults = realm.where(Geoname.class).findAll();
         cities = realm.copyFromRealm(realmResults);
         realm.commitTransaction();
+        realm.close();
+
+        int s = 0;
+
+        String currentCity = PreferencesHelper.getSharedPreferences().getString("CurrentCity", "");
+
+        for (Geoname geoname : cities) {
+                if (currentCity.contains(geoname.getName())) {
+                    long pos = s;
+                    try {
+                        PreferencesHelper.savePreference("SelectCity", pos);
+                    } catch (InvalidClassException e) {
+                        e.printStackTrace();
+                    }
+                }
+            s++;
+        }
 
         IProfile profile = new ProfileDrawerItem().withName(PreferencesHelper.getSharedPreferences().getString("CurrentCity", "Нижневартовск")).withIdentifier(1);
         mAccountHeader = new AccountHeaderBuilder()
@@ -129,16 +221,18 @@ public class ScrollActivity extends BaseActivity implements BaseView {
                 .withSelectionListEnabled(false)
                 .addProfiles(profile)
                 .build();
+
         mDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withFooter(R.layout.footer)
                 .withTranslucentStatusBar(true)
                 .withActionBarDrawerToggle(true)
                 .withAccountHeader(mAccountHeader)
                 .build();
 
         for (int i = 0; i < cities.size(); i++) {
-            mDrawer.addItem(new PrimaryDrawerItem().withIdentifier(i).withName(cities.get(i).getName()));
+                mDrawer.addItem(new PrimaryDrawerItem().withIdentifier(i).withName(cities.get(i).getName()));
         }
 
         mDrawer.addItems(new DividerDrawerItem(), item1);
@@ -171,6 +265,7 @@ public class ScrollActivity extends BaseActivity implements BaseView {
                         e.printStackTrace();
                     }
 
+                    checkLangChange();
                     mForecastPresenter.loadStartCurrent(true);
                     setAdapter();
                     Log.d(TAG, "Name: " + String.valueOf(((PrimaryDrawerItem) drawerItem).getName()));
@@ -202,12 +297,19 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     @Override
     public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
         Log.d(TAG, "Current cond: " + currentTime);
-
-        int temp = (int)Math.round(currentCond.getTempC());
-        int windspeed = (int)Math.round(currentCond.getWindKph()*0.28);
-        temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
-        tv_time_last_update.setText("Обновлено в " + currentTime.format("%H:%M"));
-        wind.setText("Ветер: " + windspeed + " м/с");
+        if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
+            int temp = (int) Math.round(currentCond.getTempC());
+            int windspeed = (int) Math.round(currentCond.getWindKph() * 0.28);
+            temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
+            tv_time_last_update.setText(getString(R.string.lastUpdate) + " " + currentTime.format("%H:%M"));
+            wind.setText(getString(R.string.windSpeed) + " " + windspeed + " " + getString(R.string.speed_metric));
+        } else {
+            int temp = (int) Math.round(currentCond.getTempF());
+            int windspeed = (int) Math.round(currentCond.getWindMph());
+            temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
+            tv_time_last_update.setText(getString(R.string.lastUpdate) + " " + currentTime.format("%H:%M"));
+            wind.setText(getString(R.string.windSpeed) + " " + windspeed + " " + getString(R.string.speed_english));
+        }
         boolean isDay = DayNight.isDay(currentTime.toMillis(false));
 
         collapsing_toolbar_layout.setTitle(mAccountHeader.getActiveProfile().getName().getText());
@@ -295,51 +397,6 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     }
 
     @Override
-    public void setItems(List<BaseViewModel> items) {
-        Log.d(TAG, "setItems");
-    }
-
-    @Override
-    public void setItemsAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5AW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsD5DS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyWU(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyAW(List<BaseViewModel> items) {
-
-    }
-
-    @Override
-    public void setItemsWeeklyDS(List<BaseViewModel> items) {
-
-    }
-
-    @Override
     public void setItemsCIty(List<Geoname> items) {
         Log.d(TAG, "Size list of geoname: " + items.size());
     }
@@ -358,8 +415,10 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
+        //checkLangChange();
         setUpDrawer();
+
+        Log.d(TAG, "onResume");
         mForecastPresenter.loadStartCurrent(true);
     }
 }

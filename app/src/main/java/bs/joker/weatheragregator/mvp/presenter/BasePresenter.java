@@ -1,17 +1,12 @@
 package bs.joker.weatheragregator.mvp.presenter;
 
-import android.content.SharedPreferences;
-import android.renderscript.Sampler;
 import android.text.format.Time;
 import android.util.Log;
-import android.widget.TimePicker;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.io.InvalidClassException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,7 +15,6 @@ import bs.joker.weatheragregator.common.manager.NetworkManager;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
 import bs.joker.weatheragregator.model.geonames.Geoname;
-import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.astronomy.SunPhase;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.view.BaseView;
@@ -36,7 +30,6 @@ import io.realm.RealmObject;
 
 public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> {
     public static final String LOG_TAG = "BasePresenter";
-    private boolean mIsInLoading;
 
     @Inject
     NetworkManager mNetworkManager;
@@ -140,410 +133,6 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
                     onLoadingError(error);
                 });
     }
-//    }
-
-    public void loadData(boolean update) {
-        onCreateRestoreDataObservable()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositories -> {
-                    onLoadingSuccess(repositories);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservable()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposable -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositories -> {
-                        onLoadingSuccess(repositories);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-//    public void loadData() {
-//        if (mIsInLoading) {
-//            return;
-//        }
-//
-//        onCreateRestoreDataObservable()
-//                .toList()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnSubscribe(disposable -> {
-//                    onLoadStart();
-//                })
-//                .doFinally(() -> {
-//                    onLoadFinish();
-//                })
-//                .subscribe(repositories -> {
-//                    onLoadingSuccess(repositories);
-//                }, error -> {
-//                    error.printStackTrace();
-//                    onLoadingError(error);
-//                });
-//
-//        mIsInLoading = true;
-//        mNetworkManager.getNetworkObservable()
-//                .flatMap(aBoolean -> {
-//                    if (!aBoolean) {
-//                        return Observable.empty();
-//                    }
-//                    return aBoolean
-//                            ? onCreateLoadDataObservable()
-//                            : Observable.empty();
-//                })
-//                .toList()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnSubscribe(disposable -> {
-//                    onLoadStart();
-//                })
-//                .doFinally(() -> {
-//                    onLoadFinish();
-//                })
-//                .subscribe(repositories -> {
-//                    onLoadingSuccess(repositories);
-//                }, error -> {
-//                    error.printStackTrace();
-//                    onLoadingError(error);
-//                });
-//    }
-
-    public void loadDataAW(boolean update) {
-//        if (mIsInLoading) {
-//            return;
-//        }
-
-        onCreateRestoreDataObservableHourlyAW()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableAW -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesAW -> {
-                    onLoadingSuccessAW(repositoriesAW);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableHourlyAW()
-
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableAW -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesAW -> {
-                        onLoadingSuccessAW(repositoriesAW);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataDS(boolean update) {
-        onCreateRestoreDataObservableHourlyDS()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableDS -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesDS -> {
-                    onLoadingSuccessDS(repositoriesDS);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-        if (update) {
-            onCreateLoadDataObservableHourlyDS()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableDS -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesDS -> {
-                        onLoadingSuccessDS(repositoriesDS);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataDaily5WU(boolean update) {
-        onCreateRestoreDataObservableDaily5WU()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableD5WU -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesD5WU -> {
-                    onLoadingSuccessD5WU(repositoriesD5WU);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableDaily5WU()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableD5WU -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesD5WU -> {
-                        onLoadingSuccessD5WU(repositoriesD5WU);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataDaily5AW(boolean update) {
-        onCreateRestoreDataObservableDaily5AW()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableD5AW -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesD5AW -> {
-                    onLoadingSuccessD5AW(repositoriesD5AW);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableDaily5AW()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableD5AW -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesD5AW -> {
-                        onLoadingSuccessD5AW(repositoriesD5AW);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataDaily5DS(boolean update) {
-        onCreateRestoreDataObservableDaily5DS()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableD5DS -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesD5DS -> {
-                    onLoadingSuccessD5DS(repositoriesD5DS);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableDaily5DS()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableD5DS -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesD5DS -> {
-                        onLoadingSuccessD5DS(repositoriesD5DS);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataWeeklyWU(boolean update) {
-        onCreateRestoreDataObservableWeeklyWU()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableWeeklyWU -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesWeeklyWU -> {
-                    onLoadingSuccessWeeklyWU(repositoriesWeeklyWU);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-        if (update) {
-            onCreateLoadDataObservableWeeklyWU()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableWeeklyWU -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesWeeklyWU -> {
-                        onLoadingSuccessWeeklyWU(repositoriesWeeklyWU);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataWeeklyAW(boolean update) {
-        onCreateRestoreDataObservableWeeklyAW()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableWeeklyAW -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesWeeklyAW -> {
-                    onLoadingSuccessWeeklyAW(repositoriesWeeklyAW);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableWeeklyAW()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableWeeklyAW -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesWeeklyAW -> {
-                        onLoadingSuccessWeeklyAW(repositoriesWeeklyAW);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
-
-    public void loadDataWeeklyDS(boolean update) {
-        onCreateRestoreDataObservableWeeklyDS()
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableWeeklyDS -> {
-                    onLoadStart();
-                })
-                .doFinally(() -> {
-                    onLoadFinish();
-                })
-                .subscribe(repositoriesWeeklyDS -> {
-                    onLoadingSuccessWeeklyDS(repositoriesWeeklyDS);
-                }, error -> {
-                    error.printStackTrace();
-                    onLoadingError(error);
-                });
-
-        if (update) {
-            onCreateLoadDataObservableWeeklyDS()
-                    .toList()
-                    .retry()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableWeeklyDS -> {
-                        onLoadStart();
-                    })
-                    .doFinally(() -> {
-                        onLoadFinish();
-                    })
-                    .subscribe(repositoriesWeeklyDS -> {
-                        onLoadingSuccessWeeklyDS(repositoriesWeeklyDS);
-                    }, error -> {
-                        error.printStackTrace();
-                        onLoadingError(error);
-                    });
-        }
-    }
 
     public abstract Observable<SunPhase> onCreateLoadDataObservableAstronomy();
 
@@ -553,42 +142,6 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public abstract Observable<Geoname> onCreateLoadDataObservableGeoNames(String query);
 
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservable();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableHourlyAW();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableHourlyDS();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5WU();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5AW();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5DS();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyWU();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyAW();
-
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyDS();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservable();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableHourlyAW();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableHourlyDS();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5WU();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5AW();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5DS();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyWU();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyAW();
-
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyDS();
-
     public void loadStartAstronomy() {
         loadDataAstronomy();
     }
@@ -597,7 +150,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         loadDataCurrent(update);
     }
 
-    public void loadStartCityKeyAW(String lat, String lng){
+    public void loadStartCityKeyAW(String lat, String lng) {
         loadDataCityKeyAW(lat, lng);
     }
 
@@ -605,80 +158,20 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         loadCity(query);
     }
 
-    public void loadStart(boolean update) {
-        loadData(update);
-        loadDataAW(update);
-        loadDataDS(update);
-
-        if (update) {
-            try {
-                PreferencesHelper.savePreference("lastUpdateHourly", getCurrentTime().toMillis(false));
-                //Log.d(LOG_TAG, "Time hourly: " + getCurrentTime() + ". " + update);
-                PreferencesHelper.savePreference("ChangeCityHourly", false);
-            } catch (InvalidClassException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void loadStartDaily(boolean update) {
-        loadDataDaily5WU(update);
-        loadDataDaily5AW(update);
-        loadDataDaily5DS(update);
-
-        if (update) {
-            try {
-                PreferencesHelper.savePreference("lastUpdateDaily", getCurrentTime().toMillis(false));
-                //Log.d(LOG_TAG, "Time daily: " + getCurrentTime() + ". " + update);
-                PreferencesHelper.savePreference("ChangeCityDaily", false);
-            } catch (InvalidClassException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void loadStartWeekly(boolean update) {
-        loadDataWeeklyWU(update);
-        loadDataWeeklyAW(update);
-        loadDataWeeklyDS(update);
-
-        if (update) {
-            try {
-                PreferencesHelper.savePreference("lastUpdateWeekly", getCurrentTime().toMillis(false));
-                //Log.d(LOG_TAG, "Time weekly: " + getCurrentTime() + ". " + update);
-                PreferencesHelper.savePreference("ChangeCityWeekly", false);
-            } catch (InvalidClassException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void onLoadStart() {
         //getViewState().showListProgress();
         //Log.d(LOG_TAG, "onLoadStart()");
     }
 
-    public void onLoadStartDaily() {
-        //getViewState().showListProgress();
-        //Log.d(LOG_TAG, "onLoadStart()");
-    }
-
     public void onLoadFinish() {
         //getViewState().hideListProgress();
-        mIsInLoading = false;
         //Log.d(LOG_TAG, "onLoadFinish()");
     }
 
-    public void onLoadDailyFinish() {
-        //getViewState().hideListProgress();
-        mIsInLoading = false;
-        //Log.d(LOG_TAG, "onLoadDailyFinish()");
-    }
-
-
-    public void onLoadingSuccessCityKey(CityKey cityKey){
+    public void onLoadingSuccessCityKey(CityKey cityKey) {
         getViewState().setCityKeyAWToDatabase(cityKey.getKey());
-        //Log.d(LOG_TAG, "onLoadingSuccessCityKey() - " + cityKey.getKey());
+        Log.d(LOG_TAG, "onLoadingSuccessCityKey() - " + cityKey.getKey());
     }
 
     public void onLoadingSuccessAstronomy(SunPhase item) {
@@ -706,9 +199,11 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         CurrentObservation item = new CurrentObservation();
 
         item.setTempC(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTemp", 0)));
+        item.setTempF(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTempF", 0)));
         item.setWeather(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
         item.setIcon(PreferencesHelper.getSharedPreferences().getString("curIcon", "Н/Д"));
         item.setWindKph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeed", 0)));
+        item.setWindMph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeedUs", 0)));
         Time time = new Time(Time.getCurrentTimezone());
         time.set(PreferencesHelper.getSharedPreferences().getLong("lastUpdate", 0l));
         getViewState().setCurrentCond(item, time);
@@ -722,7 +217,10 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         try {
             PreferencesHelper.savePreference("lastUpdate", getCurrentTime().toMillis(false));
             PreferencesHelper.savePreference("curTemp", Double.doubleToRawLongBits(item.getTempC()));
+            PreferencesHelper.savePreference("curTempF", Double.doubleToRawLongBits(item.getTempF()));
             PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
+            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
+            PreferencesHelper.savePreference("curWindSpeedUs", Double.doubleToRawLongBits(item.getWindMph()));
             PreferencesHelper.savePreference("curCond", item.getWeather());
             PreferencesHelper.savePreference("curIcon", item.getIcon());
         } catch (InvalidClassException e) {
@@ -739,65 +237,6 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
         }
         getViewState().setItemsCIty(items);
         //Log.d(LOG_TAG, "onLoadingCitySuccess() - after");
-    }
-
-    public void onLoadingSuccess(List<BaseViewModel> items) {
-        for (int i=0; i<12; i++){
-            Log.d(LOG_TAG, "onLoadingSuccessWU() - temp " + items.get(i));
-        }
-
-        getViewState().setItems(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessWU() - after");
-    }
-
-    public void onLoadingSuccessAW(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessAW() - before " + items.size());
-
-        getViewState().setItemsAW(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessAW() - after");
-    }
-
-    public void onLoadingSuccessDS(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessDS() - before " + items.size());
-
-        getViewState().setItemsDS(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessDS() - after");
-    }
-
-    private void onLoadingSuccessD5WU(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_WU() - before " + items.size());
-        getViewState().setItemsD5WU(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_WU() - after");
-    }
-
-    private void onLoadingSuccessD5AW(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_AW() - before " + items.size());
-        getViewState().setItemsD5AW(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_AW() - after");
-    }
-
-    private void onLoadingSuccessD5DS(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_DS() - before " + items.size());
-        getViewState().setItemsD5DS(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessD5_DS() - after");
-    }
-
-    private void onLoadingSuccessWeeklyWU(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_WU() - before " + items.size());
-        getViewState().setItemsWeeklyWU(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_WU() - after");
-    }
-
-    private void onLoadingSuccessWeeklyAW(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_AW() - before " + items.size());
-        getViewState().setItemsWeeklyAW(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_AW() - after");
-    }
-
-    private void onLoadingSuccessWeeklyDS(List<BaseViewModel> items) {
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_DS() - before " + items.size());
-        getViewState().setItemsWeeklyDS(items);
-        //Log.d(LOG_TAG, "onLoadingSuccessWeekly_DS() - after");
     }
 
     public void onLoadingError(Throwable throwable) {

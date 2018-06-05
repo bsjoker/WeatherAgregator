@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class Geoname extends RealmObject{
 
     private Integer cityKeyAW;
+    private String langOfQuery;
     @SerializedName("adminCode1")
     @Expose
     private String adminCode1;
@@ -66,6 +67,14 @@ public class Geoname extends RealmObject{
 
     public void setCityKeyAW(Integer cityKeyAW) {
         this.cityKeyAW = cityKeyAW;
+    }
+
+    public String getLangOfQuery() {
+        return langOfQuery;
+    }
+
+    public void setLangOfQuery(String langOfQuery) {
+        this.langOfQuery = langOfQuery;
     }
 
     public String getAdminCode1() {

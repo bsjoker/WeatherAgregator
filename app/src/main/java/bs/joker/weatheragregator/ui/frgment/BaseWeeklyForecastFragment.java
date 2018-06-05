@@ -10,6 +10,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -24,7 +25,9 @@ import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
+import bs.joker.weatheragregator.mvp.presenter.BaseWeeklyPresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
+import bs.joker.weatheragregator.mvp.view.WeeklyForecastView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,7 +36,7 @@ import butterknife.Unbinder;
  * Created by bakays on 30.01.2018.
  */
 
-public abstract class BaseWeeklyForecastFragment extends BaseFragment implements BaseView {
+public abstract class BaseWeeklyForecastFragment extends BaseFragment implements WeeklyForecastView {
     public static final String TAG = "BaseWeeklyFragment";
 
     @BindView(R.id.forecast_weather_recycler_view_wu)
@@ -52,13 +55,20 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     @BindView(R.id.divider_wu)
     ImageView divider;
 
+    @BindView(R.id.progressBarWU)
+    ProgressBar mProgressBarWU;
+    @BindView(R.id.progressBarAW)
+    ProgressBar mProgressBarAW;
+    @BindView(R.id.progressBarDS)
+    ProgressBar mProgressBarDS;
+
     private Unbinder mUnbinder;
 
     HourlyForecastAdapter mHourlyForecastAdapter;
     HourlyForecastAdapterAW mHourlyForecastAdapterAW;
     HourlyForecastAdapterDS mHourlyForecastAdapterDS;
 
-    protected BasePresenter mBasePresenter;
+    protected BaseWeeklyPresenter mBaseWeeklyPresenter;
 
 
     @Override
@@ -73,12 +83,12 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
 
         boolean update = ((curTime.toMillis(false) - last_up)>3600000l);
         Log.d(TAG, "State before(weekly): " + update);
-        mBasePresenter = onCreateBasePresenter();
+        mBaseWeeklyPresenter = onCreateBasePresenter();
         if (PreferencesHelper.getSharedPreferences().getBoolean("ChangeCityWeekly", false)) {
             update = true;
         }
         Log.d(TAG, "State (weekly): " + update);
-        mBasePresenter.loadStartWeekly(update);
+        mBaseWeeklyPresenter.loadStartWeekly(update);
 
         logo_wu.setImageResource(R.drawable.wunderground_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
@@ -89,9 +99,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
         mRecyclerViewDS.setHasFixedSize(true);
 
         setUpRecyclerView(view);
-        setUpAdapret(mRecyclerViewWU);
-        setUpAdapret(mRecyclerViewAW);
-        setUpAdapret(mRecyclerViewDS);
+        setUpAdapret();
     }
 
     private void setUpRecyclerView(View view) {
@@ -106,7 +114,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
         mRecyclerViewDS.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void setUpAdapret(RecyclerView recyclerViewDS) {
+    private void setUpAdapret() {
         mHourlyForecastAdapter = new HourlyForecastAdapter();
         mRecyclerViewWU.setAdapter(mHourlyForecastAdapter);
         mHourlyForecastAdapterAW = new HourlyForecastAdapterAW();
@@ -138,52 +146,6 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     }
 
     @Override
-    public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
-
-    }
-
-    @Override
-    public void setItems(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
-    }
-
-    @Override
-    public void setItemsAW(List<BaseViewModel> items) {
-        Log.d(TAG, "Size AW: " + items.size());
-        mHourlyForecastAdapterAW.setItems(items);
-    }
-
-    @Override
-    public void setItemsDS(List<BaseViewModel> items) {
-        Log.d(TAG, "Size DS: " + items.size());
-        mHourlyForecastAdapterDS.setItems(items);
-    }
-
-    @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapter.setItems(items);
-    }
-
-    @Override
-    public void setItemsD5AW(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapterAW.setItems(items);
-    }
-
-    @Override
-    public void setItemsD5DS(List<BaseViewModel> items) {
-        Log.d(TAG, "Size: " + items.size());
-        mHourlyForecastAdapterDS.setItems(items);
-    }
-
-    @Override
     public void setItemsWeeklyWU(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapter.setItems(items);
@@ -202,14 +164,49 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     }
 
     @Override
-    public void setItemsCIty(List<Geoname> items) {
-
+    public void showListProgressWeekly(int n) {
+        switch (n){
+            case 1:
+                mProgressBarWU.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressWU");
+                break;
+            case 2:
+                mProgressBarAW.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressAW");
+                break;
+            case 3:
+                mProgressBarDS.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressDS");
+                break;
+            default:
+                Log.d(TAG, "Default.");
+        }
     }
 
     @Override
-    public void setCityKeyAWToDatabase(String key) {
-
+    public void hideListProgressWeekly(int n) {
+        switch (n) {
+            case 1:
+                mProgressBarWU.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressWU");
+                break;
+            case 2:
+                mProgressBarAW.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressAW");
+                break;
+            case 3:
+                mProgressBarDS.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressDS");
+                break;
+            default:
+                Log.d(TAG, "Default.");
+        }
     }
 
-    protected abstract BasePresenter onCreateBasePresenter();
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    protected abstract BaseWeeklyPresenter onCreateBasePresenter();
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
+import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecastday_;
@@ -21,8 +22,13 @@ public class ForecastWeeklyItemViewModel extends BaseViewModel {
     public ForecastWeeklyItemViewModel(Forecastday_ items){
         this.dayOfWeek = new java.text.SimpleDateFormat("EEEE").format(new java.util.Date(Integer.valueOf(items.getDate().getEpoch())*1000L));
         this.description = items.getConditions();
-        this.tempMax = items.getHigh().getCelsius();
-        this.tempMin = items.getLow().getCelsius();
+        if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
+            this.tempMax = items.getHigh().getCelsius();
+            this.tempMin = items.getLow().getCelsius();
+        } else {
+            this.tempMax = items.getHigh().getFahrenheit();
+            this.tempMin = items.getLow().getFahrenheit();
+        }
         this.icon = ConvertDescriptionCode.convertCodeD5WU(items.getIcon());
     }
 

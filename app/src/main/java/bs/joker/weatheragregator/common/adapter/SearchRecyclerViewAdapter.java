@@ -29,7 +29,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     // класс view holder-а с помощью которого мы получаем ссылку на каждый элемент
     // отдельного пункта списка
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        // наш пункт состоит только из одного TextView
+
         public TextView mTextView;
 
         public ViewHolder(View itemView) {

@@ -110,8 +110,9 @@ public class BaseActivity extends MvpAppCompatActivity {
         tabsAdapter.notifyDataSetChanged();
     }
 
+
     public void fragmentOnScreen(BaseFragment currentFragment) {
-Log.d(LOG_TAG, "fragmentOnScreen");
+        Log.d(LOG_TAG, "fragmentOnScreen");
     }
 
     private class TabsAdapter extends FragmentStatePagerAdapter {

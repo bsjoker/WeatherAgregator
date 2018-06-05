@@ -9,8 +9,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import javax.inject.Inject;
 
 import bs.joker.MyApplication;
+import bs.joker.weatheragregator.mvp.presenter.BaseHourlyPresenter;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
+import bs.joker.weatheragregator.mvp.presenter.HourlyForecastPresenter;
 import bs.joker.weatheragregator.rest.api.WeatherApi;
 
 /**
@@ -25,7 +27,7 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
     WeatherApi mWeatherApi;
 
     @InjectPresenter
-    ForecastPresenter mForecastPresenter;
+    HourlyForecastPresenter mHourlyForecastPresenter;
 
 //    public HourlyForecastFragment(){
 //    }
@@ -41,18 +43,44 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         position = getArguments().getInt("position");
         Log.d("HourlyForecastFragment", "onCreate");
         MyApplication.getApplicationComponent().inject(this);
     }
 
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        savedInstanceState = null;
+//        super.onActivityCreated(savedInstanceState);
+//    }
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onPause() {
+        super.onPause();
+        Log.d("HourlyForecastFragment", "onPause");
     }
 
     @Override
-    protected BasePresenter onCreateBasePresenter() {
-        return mForecastPresenter;
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("HourlyForecastFragment", "onDestroyView");
+    }
+
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        //savedInstanceState = null;
+//        super.onViewStateRestored(savedInstanceState);
+//
+//        if(savedInstanceState!=null) {
+//            Log.d("HourlyForecastFragment", "onViewStateRestored");
+//        } else{
+//            Log.d("HourlyForecastFragment", "onViewStateRestored - empty");
+//        }
+//    }
+
+    @Override
+    protected BaseHourlyPresenter onCreateBasePresenter() {
+        return mHourlyForecastPresenter;
     }
 }

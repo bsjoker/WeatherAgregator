@@ -2,6 +2,7 @@ package bs.joker.weatheragregator.model.view;
 
 import android.view.View;
 
+import bs.joker.weatheragregator.R;
 import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
