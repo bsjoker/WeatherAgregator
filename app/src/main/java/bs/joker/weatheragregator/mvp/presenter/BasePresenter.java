@@ -7,7 +7,11 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.io.InvalidClassException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -15,6 +19,8 @@ import bs.joker.weatheragregator.common.manager.NetworkManager;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
 import bs.joker.weatheragregator.model.geonames.Geoname;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.Weather;
 import bs.joker.weatheragregator.model.wunderground.astronomy.SunPhase;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.view.BaseView;
@@ -36,7 +42,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public void loadDataAstronomy() {
         onCreateLoadDataObservableAstronomy()
-                .retry()
+                //.retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -55,7 +61,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public void loadDataCityKeyAW(String lat, String lng) {
         onCreateLoadCityKeyObservableAccuweather(lat, lng)
-                .retry()
+                //.retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -73,12 +79,36 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
     }
 
 
+//    public void loadDataCurrent(boolean update) {
+//        onLoadingCurrentFromPrefs();
+//
+//        if (update) {
+//            onCreateLoadDataObservableCurrent()
+//                    .retry()
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .doOnSubscribe(disposable -> {
+//                        onLoadStart();
+//                    })
+//                    .doFinally(() -> {
+//                        onLoadFinish();
+//                    })
+//                    .subscribe(repositorCurrentObservation -> {
+//                        onLoadingSuccessCurrent(repositorCurrentObservation);
+//                    }, error -> {
+//                        error.printStackTrace();
+//                        onLoadingError(error);
+//                    });
+//        }
+//    }
+
     public void loadDataCurrent(boolean update) {
         onLoadingCurrentFromPrefs();
 
         if (update) {
-            onCreateLoadDataObservableCurrent()
-                    .retry()
+            onCreateLoadDataObservableCurrentWeatherbitIO()
+                    .toList()
+                    //.retry()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> {
@@ -87,8 +117,8 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
                     .doFinally(() -> {
                         onLoadFinish();
                     })
-                    .subscribe(repositorCurrentObservation -> {
-                        onLoadingSuccessCurrent(repositorCurrentObservation);
+                    .subscribe(repositoryCurrentObservation -> {
+                        onLoadingSuccessCurrent(repositoryCurrentObservation);
                     }, error -> {
                         error.printStackTrace();
                         onLoadingError(error);
@@ -117,7 +147,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 //        if (update) {
         onCreateLoadDataObservableGeoNames(query)
                 .toList()
-                .retry()
+                //.retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
@@ -138,7 +168,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public abstract Observable<CityKey> onCreateLoadCityKeyObservableAccuweather(String lat, String lng);
 
-    public abstract Observable<CurrentObservation> onCreateLoadDataObservableCurrent();
+    public abstract Observable<DatumCurWeatherbitio> onCreateLoadDataObservableCurrentWeatherbitIO();
 
     public abstract Observable<Geoname> onCreateLoadDataObservableGeoNames(String query);
 
@@ -176,13 +206,94 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 
     public void onLoadingSuccessAstronomy(SunPhase item) {
 
+//        Time curTime = new Time(Time.getCurrentTimezone());
+//        curTime.setToNow();
+//
+//        Time sunRise = new Time(Time.getCurrentTimezone());
+//        Time sunSet = new Time(Time.getCurrentTimezone());
+//        sunRise.set(0, Integer.parseInt(item.getSunrise().getMinute()), Integer.parseInt(item.getSunrise().getHour()), curTime.monthDay, curTime.month, curTime.year);
+//        sunSet.set(0, Integer.parseInt(item.getSunset().getMinute()), Integer.parseInt(item.getSunset().getHour()), curTime.monthDay, curTime.month, curTime.year);
+//
+//        try {
+//            PreferencesHelper.savePreference("sunRise", sunRise.toMillis(false));
+//            PreferencesHelper.savePreference("sunSet", sunSet.toMillis(false));
+//        } catch (InvalidClassException e) {
+//            e.printStackTrace();
+//        }
+
+        //Log.d(LOG_TAG, "onLoadingSuccessCurrentAstronomy() - before " + item.getSunrise().getHour());
+        //Boolean day = sunRise.before(curTime) && sunSet.after(curTime);
+    }
+
+//    public void onLoadingCurrentFromPrefs() {
+//        CurrentObservation item = new CurrentObservation();
+//
+//        item.setTempC(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTemp", 0)));
+//        item.setTempF(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTempF", 0)));
+//        item.setWeather(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
+//        item.setIcon(PreferencesHelper.getSharedPreferences().getString("curIcon", "Н/Д"));
+//        item.setWindKph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeed", 0)));
+//        item.setWindMph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeedUs", 0)));
+//        Time time = new Time(Time.getCurrentTimezone());
+//        time.set(PreferencesHelper.getSharedPreferences().getLong("lastUpdate", 0l));
+//        getViewState().setCurrentCond(item, time);
+//    }
+
+    public void onLoadingCurrentFromPrefs() {
+        DatumCurWeatherbitio item = new DatumCurWeatherbitio();
+
+        Weather weatherModel = new Weather();
+        weatherModel.setDescription(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
+        weatherModel.setCode(PreferencesHelper.getSharedPreferences().getString("curCode", "900"));
+
+        item.setTemp(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTemp", 0)));
+        item.setWeather(weatherModel);
+        item.setWindSpd(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeed", 0)));
+        Time time = new Time(Time.getCurrentTimezone());
+        time.set(PreferencesHelper.getSharedPreferences().getLong("lastUpdate", 0l));
+        getViewState().setCurrentCond(item, time);
+    }
+
+//    public void onLoadingSuccessCurrent(CurrentObservation item) {
+//        //Log.d(LOG_TAG, "onLoadingSuccessCurrentWU() - before ");
+//
+//        getViewState().setCurrentCond(item, getCurrentTime());
+//
+//        try {
+//            PreferencesHelper.savePreference("lastUpdate", getCurrentTime().toMillis(false));
+//            PreferencesHelper.savePreference("curTemp", Double.doubleToRawLongBits(item.getTempC()));
+//            PreferencesHelper.savePreference("curTempF", Double.doubleToRawLongBits(item.getTempF()));
+//            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
+//            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
+//            PreferencesHelper.savePreference("curWindSpeedUs", Double.doubleToRawLongBits(item.getWindMph()));
+//            PreferencesHelper.savePreference("curCond", item.getWeather());
+//            PreferencesHelper.savePreference("curIcon", item.getIcon());
+//        } catch (InvalidClassException e) {
+//            e.printStackTrace();
+//        }
+//
+//        //Log.d(LOG_TAG, "onLoadingSuccessCurrentWU() - after " + getCurrentTime());
+//    }
+
+    public void onLoadingSuccessCurrent(List<DatumCurWeatherbitio> itemList) {
+        Log.d(LOG_TAG, "onLoadingSuccessCurrentIO() - before ");
+        DatumCurWeatherbitio item = itemList.get(0);
+        Log.d(LOG_TAG, "Temp weatherbitIO: " + item.getTemp()); //1час = 3600000мс
+        getViewState().setCurrentCond(item, getCurrentTime());
+
         Time curTime = new Time(Time.getCurrentTimezone());
         curTime.setToNow();
 
+        Calendar cal = Calendar.getInstance();
+        Log.d(LOG_TAG, "Offset: " + cal.getTimeZone().getRawOffset()/3600000); //1час = 3600000мс
+        int timeZoneOffset = cal.getTimeZone().getRawOffset()/3600000;
+
         Time sunRise = new Time(Time.getCurrentTimezone());
         Time sunSet = new Time(Time.getCurrentTimezone());
-        sunRise.set(0, Integer.parseInt(item.getSunrise().getMinute()), Integer.parseInt(item.getSunrise().getHour()), curTime.monthDay, curTime.month, curTime.year);
-        sunSet.set(0, Integer.parseInt(item.getSunset().getMinute()), Integer.parseInt(item.getSunset().getHour()), curTime.monthDay, curTime.month, curTime.year);
+        sunRise.set(0, Integer.parseInt(item.getSunrise().substring(3,5)), Integer.parseInt(item.getSunrise().substring(0,2))+timeZoneOffset, curTime.monthDay, curTime.month, curTime.year);
+        sunSet.set(0, Integer.parseInt(item.getSunset().substring(3,5)), Integer.parseInt(item.getSunset().substring(0,2))+timeZoneOffset, curTime.monthDay, curTime.month, curTime.year);
+
+        Log.d(LOG_TAG, "SunSet: " + sunSet.format("%d.%m.%Y %H.%M.%S") + ". SunRise: " + sunRise.format("%d.%m.%Y %H.%M.%S"));
 
         try {
             PreferencesHelper.savePreference("sunRise", sunRise.toMillis(false));
@@ -191,43 +302,17 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
             e.printStackTrace();
         }
 
-        //Log.d(LOG_TAG, "onLoadingSuccessCurrentAstronomy() - before " + item.getSunrise().getHour());
-        //Boolean day = sunRise.before(curTime) && sunSet.after(curTime);
-    }
-
-    public void onLoadingCurrentFromPrefs() {
-        CurrentObservation item = new CurrentObservation();
-
-        item.setTempC(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTemp", 0)));
-        item.setTempF(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTempF", 0)));
-        item.setWeather(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
-        item.setIcon(PreferencesHelper.getSharedPreferences().getString("curIcon", "Н/Д"));
-        item.setWindKph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeed", 0)));
-        item.setWindMph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeedUs", 0)));
-        Time time = new Time(Time.getCurrentTimezone());
-        time.set(PreferencesHelper.getSharedPreferences().getLong("lastUpdate", 0l));
-        getViewState().setCurrentCond(item, time);
-    }
-
-    public void onLoadingSuccessCurrent(CurrentObservation item) {
-        //Log.d(LOG_TAG, "onLoadingSuccessCurrentWU() - before ");
-
-        getViewState().setCurrentCond(item, getCurrentTime());
-
         try {
             PreferencesHelper.savePreference("lastUpdate", getCurrentTime().toMillis(false));
-            PreferencesHelper.savePreference("curTemp", Double.doubleToRawLongBits(item.getTempC()));
-            PreferencesHelper.savePreference("curTempF", Double.doubleToRawLongBits(item.getTempF()));
-            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
-            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
-            PreferencesHelper.savePreference("curWindSpeedUs", Double.doubleToRawLongBits(item.getWindMph()));
-            PreferencesHelper.savePreference("curCond", item.getWeather());
-            PreferencesHelper.savePreference("curIcon", item.getIcon());
+            PreferencesHelper.savePreference("curTemp", Double.doubleToRawLongBits(item.getTemp()));
+            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindSpd()));
+            PreferencesHelper.savePreference("curCond", item.getWeather().getDescription());
+            PreferencesHelper.savePreference("curCode", item.getWeather().getCode());
         } catch (InvalidClassException e) {
             e.printStackTrace();
         }
 
-        //Log.d(LOG_TAG, "onLoadingSuccessCurrentWU() - after " + getCurrentTime());
+        Log.d(LOG_TAG, "onLoadingSuccessCurrentIO() - after " + getCurrentTime().format("%d.%m.%Y %H.%M.%S"));
     }
 
     public void onLoadingCitySuccess(List<Geoname> items) {

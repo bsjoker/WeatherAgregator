@@ -2,6 +2,10 @@ package bs.joker.weatheragregator.common.utils;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import bs.joker.weatheragregator.model.PreferencesHelper;
 
 /**
@@ -17,8 +21,15 @@ public class DayNight {
         if (sunRise == 0l || sunSet == 0l) {
             return true;
         }
+
+        Date sunRiseD = new Date(sunRise);
+        Date sunSetD = new Date(sunSet);
+        Date epochTimeD = new Date(epochTime);
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss a");
+
+
         isDay = (epochTime >= sunRise && epochTime <= sunSet);
-        Log.d(LOG_TAG, "sunRise: " + sunRise + ". Time: " + epochTime + ". sunSet: " + sunSet + ". Boolean: " + isDay);
+        Log.d(LOG_TAG, "sunRise: " + formatForDateNow.format(sunRiseD) + ". Time: " + formatForDateNow.format(epochTimeD) + ". sunSet: " + formatForDateNow.format(sunSetD) + ". Boolean: " + isDay);
         return isDay;
     }
 }

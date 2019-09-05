@@ -16,8 +16,8 @@ public class BaseItemResponse<T> {
 
     public List<T> item_hourly_forecast = new ArrayList<>();
     public List<T> item_hourly_forecast_aw = new ArrayList<>();
+    public List<T> item_hourly_forecast_wbio = new ArrayList<>();
     public List<T> data = new ArrayList<>();
-
 
     public List<T> getHourly_forecast_aw() {
         return item_hourly_forecast_aw;
@@ -25,6 +25,10 @@ public class BaseItemResponse<T> {
 
     public List<T> getHourly_forecast() {
         return item_hourly_forecast;
+    }
+
+    public List<T> getItem_hourly_forecast_wbio() {
+        return item_hourly_forecast_wbio;
     }
 
     public List<T> getHourly_data() {

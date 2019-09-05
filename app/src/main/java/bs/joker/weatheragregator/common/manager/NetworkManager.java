@@ -48,7 +48,7 @@ public class NetworkManager {
                         return false;
                     }
 
-                    URL url = new URL("http://api.wunderground.com");
+                    URL url = new URL("http://api.weatherbit.io");
                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                     urlc.setConnectTimeout(2000);
                     urlc.connect();

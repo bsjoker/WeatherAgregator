@@ -31,13 +31,13 @@
                 android:descendantFocusability="blocksDescendants">
 
                 <ImageView
-                    android:id="@+id/logo_wundeground"
+                    android:id="@+id/logo_weatherbit"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:src="@drawable/wunderground_logo"/>
 
                 <ProgressBar
-                    android:id="@+id/progressBarWU"
+                    android:id="@+id/progressBarWBIO"
                     android:indeterminateTintMode="src_in"
                     android:indeterminateTint="@color/colorDivider"
                     android:layout_width="20dp"
@@ -51,13 +51,13 @@
                     android:id="@+id/forecast_weather_recycler_view_wu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/logo_wundeground"
+                    android:layout_below="@id/logo_weatherbit"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="12dp">
                 </android.support.v7.widget.RecyclerView>
 
                 <ImageView
-                    android:id="@+id/divider_wu"
+                    android:id="@+id/divider_wbio"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignTop="@id/forecast_weather_recycler_view_wu"
@@ -85,7 +85,7 @@
                     android:id="@+id/logo_accuweather"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
-                    android:layout_alignStart="@id/logo_wundeground"
+                    android:layout_alignStart="@id/logo_weatherbit"
                     tools:ignore="NotSibling" />
 
                 <ProgressBar
@@ -137,7 +137,7 @@
                     android:id="@+id/logo_darksky"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
-                    android:layout_alignStart="@id/logo_wundeground"
+                    android:layout_alignStart="@id/logo_weatherbit"
                     android:src="@drawable/darksky_logo"
                     tools:ignore="NotSibling" />
 

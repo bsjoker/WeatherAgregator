@@ -7,6 +7,7 @@ import java.util.List;
 
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
@@ -25,7 +26,7 @@ public abstract class BaseSearchCityFragment extends BaseFragmentSearch implemen
     }
 
     @Override
-    public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
+    public void setCurrentCond(DatumCurWeatherbitio currentCond, Time currentTime) {
 
     }
 

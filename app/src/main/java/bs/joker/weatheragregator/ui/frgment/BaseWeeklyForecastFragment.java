@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.Date;
 import java.util.List;
 
 import bs.joker.weatheragregator.R;
@@ -21,12 +20,8 @@ import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapter;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterAW;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterDS;
 import bs.joker.weatheragregator.model.PreferencesHelper;
-import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
-import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
-import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
 import bs.joker.weatheragregator.mvp.presenter.BaseWeeklyPresenter;
-import bs.joker.weatheragregator.mvp.view.BaseView;
 import bs.joker.weatheragregator.mvp.view.WeeklyForecastView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,16 +41,16 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     @BindView(R.id.forecast_weather_recycler_view_ds)
     RecyclerView mRecyclerViewDS;
 
-    @BindView(R.id.logo_wundeground)
+    @BindView(R.id.logo_weatherbit)
     ImageView logo_wu;
     @BindView(R.id.logo_accuweather)
     ImageView logo_aw;
     @BindView(R.id.logo_darksky)
     ImageView logo_ds;
-    @BindView(R.id.divider_wu)
+    @BindView(R.id.divider_wbio)
     ImageView divider;
 
-    @BindView(R.id.progressBarWU)
+    @BindView(R.id.progressBarWBIO)
     ProgressBar mProgressBarWU;
     @BindView(R.id.progressBarAW)
     ProgressBar mProgressBarAW;

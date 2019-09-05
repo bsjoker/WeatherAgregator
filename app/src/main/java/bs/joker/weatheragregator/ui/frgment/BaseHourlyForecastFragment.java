@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.InvalidClassException;
 import java.util.List;
 
 import bs.joker.weatheragregator.R;
@@ -21,12 +20,8 @@ import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapter;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterAW;
 import bs.joker.weatheragregator.common.adapter.HourlyForecastAdapterDS;
 import bs.joker.weatheragregator.model.PreferencesHelper;
-import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
-import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.BaseHourlyPresenter;
-import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
-import bs.joker.weatheragregator.mvp.view.BaseView;
 import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,23 +35,23 @@ public abstract class BaseHourlyForecastFragment extends BaseFragment implements
 public static final String TAG = "BaseHourlFragment";
 
     @BindView(R.id.forecast_weather_recycler_view_wu)
-    RecyclerView mRecyclerViewWU;
+    RecyclerView mRecyclerViewWBIO;
     @BindView(R.id.forecast_weather_recycler_view_aw)
     RecyclerView mRecyclerViewAW;
     @BindView(R.id.forecast_weather_recycler_view_ds)
     RecyclerView mRecyclerViewDS;
 
-    @BindView(R.id.logo_wundeground)
-    ImageView logo_wu;
+    @BindView(R.id.logo_weatherbit)
+    ImageView logo_wbio;
     @BindView(R.id.logo_accuweather)
     ImageView logo_aw;
     @BindView(R.id.logo_darksky)
     ImageView logo_ds;
-    @BindView(R.id.divider_wu)
+    @BindView(R.id.divider_wbio)
     ImageView divider;
 
-    @BindView(R.id.progressBarWU)
-    ProgressBar mProgressBarWU;
+    @BindView(R.id.progressBarWBIO)
+    ProgressBar mProgressBarWBIO;
     @BindView(R.id.progressBarAW)
     ProgressBar mProgressBarAW;
     @BindView(R.id.progressBarDS)
@@ -93,11 +88,11 @@ public static final String TAG = "BaseHourlFragment";
         Log.d(TAG, "State: " + update);
         mBaseHourlyPresenter.loadStart(update);
 
-        logo_wu.setImageResource(R.drawable.wunderground_logo);
+        logo_wbio.setImageResource(R.drawable.weatherbitio_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
         logo_ds.setImageResource(R.drawable.darksky_logo);
 
-        mRecyclerViewWU.setHasFixedSize(true);
+        mRecyclerViewWBIO.setHasFixedSize(true);
         mRecyclerViewAW.setHasFixedSize(true);
         mRecyclerViewDS.setHasFixedSize(true);
 
@@ -106,9 +101,9 @@ public static final String TAG = "BaseHourlFragment";
     }
 
     private void setUpRecyclerView(View view) {
-        mRecyclerViewWU.setNestedScrollingEnabled(false);
-        mRecyclerViewWU.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerViewWU.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerViewWBIO.setNestedScrollingEnabled(false);
+        mRecyclerViewWBIO.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewWBIO.setItemAnimator(new DefaultItemAnimator());
         mRecyclerViewAW.setNestedScrollingEnabled(false);
         mRecyclerViewAW.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewAW.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +114,7 @@ public static final String TAG = "BaseHourlFragment";
 
     public void setUpAdapret() {
         mHourlyForecastAdapter = new HourlyForecastAdapter();
-        mRecyclerViewWU.setAdapter(mHourlyForecastAdapter);
+        mRecyclerViewWBIO.setAdapter(mHourlyForecastAdapter);
         mHourlyForecastAdapterAW = new HourlyForecastAdapterAW();
         mRecyclerViewAW.setAdapter(mHourlyForecastAdapterAW);
         mHourlyForecastAdapterDS = new HourlyForecastAdapterDS();
@@ -171,7 +166,7 @@ public static final String TAG = "BaseHourlFragment";
     public void showListProgress(int n) {
         switch (n){
             case 1:
-                mProgressBarWU.setVisibility(View.VISIBLE);
+                mProgressBarWBIO.setVisibility(View.VISIBLE);
                 Log.d(TAG, "ShowProgressWU");
                 break;
             case 2:
@@ -191,7 +186,7 @@ public static final String TAG = "BaseHourlFragment";
     public void hideListProgress(int n) {
         switch (n) {
             case 1:
-                mProgressBarWU.setVisibility(View.GONE);
+                mProgressBarWBIO.setVisibility(View.GONE);
                 Log.d(TAG, "HideProgressWU");
                 break;
             case 2:

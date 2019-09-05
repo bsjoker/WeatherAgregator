@@ -17,6 +17,7 @@ import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.view.ForecastHourlyItemViewModel;
+import bs.joker.weatheragregator.model.weatherbitio.hourly.DatumHourlyWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.HourlyForecastWunderground;
 import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
 import bs.joker.weatheragregator.rest.api.ApiMethods;
@@ -33,7 +34,7 @@ import io.realm.RealmResults;
 
 public class HourlyForecastPresenter extends BaseHourlyPresenter<HourlyForecastView> {
     public static final String LOG_TAG = "HourlyForecastPresenter";
-    private List<HourlyForecastWunderground> listWU;
+    private List<DatumHourlyWeatherbitio> listWBIO;
     private List<HourlyForecastAccuweather> listAW;
     private List<HourlyForecastDarksky> listDS;
 
@@ -45,23 +46,24 @@ public class HourlyForecastPresenter extends BaseHourlyPresenter<HourlyForecastV
     }
 
     @Override
-    public Observable<BaseViewModel> onCreateLoadDataObservable() {
-        Log.d(LOG_TAG, "ObservableHourlyWU");
+    public Observable<BaseViewModel> onCreateLoadDataObservableHourlyWBIO() {
+        Log.d(LOG_TAG, "ObservableHourlyWBIO");
         final int[] i = {1};
-        return mWeatherApi.getForecastWU(UrlMaker.getUrl(ApiMethods.HOURLY_WUNDERGROUND)).flatMap(hourlyForecastWundergroundResponse ->
-                Observable.fromIterable(hourlyForecastWundergroundResponse.hourly_forecast_wa)
+        return mWeatherApi.getForecastWBIO(UrlMaker.getUrlWeatherbitio(ApiMethods.HOURLY_WEATHERBIT_IO)).flatMap(hourlyForecastWeatherbitIOResponse ->
+                Observable.fromIterable(hourlyForecastWeatherbitIOResponse.weatherbitio_list)
         )
                 .take(12)
-                .doOnNext(hourlyForecastWunderground -> {
-                    hourlyForecastWunderground = SetID.setIDHourlyWU(hourlyForecastWunderground, i[0]);
-                    saveToDb(hourlyForecastWunderground);
+                .doOnNext(hourlyForecastWeatherbitIO -> {
+                    Log.d(LOG_TAG, "ObservableHourlyWBIO temp: " + hourlyForecastWeatherbitIO.getTemp());
+                    hourlyForecastWeatherbitIO = SetID.setIDHourlyWBIO(hourlyForecastWeatherbitIO, i[0]);
+                    saveToDb(hourlyForecastWeatherbitIO);
                     i[0]++;
                 })
 
-                .flatMap(hourlyForecastWunderground -> {
+                .flatMap(hourlyForecastWeatherbitIO -> {
                     List<BaseViewModel> items = new ArrayList<BaseViewModel>();
-                    Log.d(LOG_TAG, "ObservableHourlyWU " + hourlyForecastWunderground.getTemp().getMetric());
-                    items.add(new ForecastHourlyItemViewModel(hourlyForecastWunderground));
+                    Log.d(LOG_TAG, "ObservableHourlyWBIO temp: " + hourlyForecastWeatherbitIO.getTemp());
+                    items.add(new ForecastHourlyItemViewModel(hourlyForecastWeatherbitIO));
                     return io.reactivex.Observable.fromIterable(items);
                 });
     }
@@ -74,6 +76,7 @@ public class HourlyForecastPresenter extends BaseHourlyPresenter<HourlyForecastV
         )
                 .take(12)
                 .doOnNext(hourlyForecastAccuweather -> {
+                    Log.d(LOG_TAG, "ObservableHourlyAW temp: " + hourlyForecastAccuweather.getTemperature().getValue());
                     hourlyForecastAccuweather = SetID.setIDHourlyAW(hourlyForecastAccuweather, i[0]);
                     saveToDb(hourlyForecastAccuweather);
                     i[0]++;
@@ -106,24 +109,24 @@ public class HourlyForecastPresenter extends BaseHourlyPresenter<HourlyForecastV
                 });
     }
 
-    public Callable<List<HourlyForecastWunderground>> getListFromRealmCallable() {
+    public Callable<List<DatumHourlyWeatherbitio>> getListFromRealmCallable() {
         return () -> {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(inRealm-> {
-                final RealmResults<HourlyForecastWunderground> realmResults = realm.where(HourlyForecastWunderground.class)
+                final RealmResults<DatumHourlyWeatherbitio> realmResults = realm.where(DatumHourlyWeatherbitio.class)
                         .findAll();
-                 listWU = realm.copyFromRealm(realmResults);
+                 listWBIO = realm.copyFromRealm(realmResults);
             });
 
-            return listWU;
+            return listWBIO;
         };
     }
 
     @Override
     public Observable<BaseViewModel> onCreateRestoreDataObservable() {
         return Observable.fromCallable(getListFromRealmCallable())
-                .flatMap(Observable::fromIterable).take(12)
-                .flatMap(hourlyForecastWunderground -> Observable.fromIterable(parsePojoModel(hourlyForecastWunderground, null, null)));
+                .flatMap(Observable::fromIterable)
+                .flatMap(hourlyForecastWeatherbitIO -> Observable.fromIterable(parsePojoModel(hourlyForecastWeatherbitIO, null, null)));
     }
 
     //Восстановление из БД почасовой погоды с AccuWeather
@@ -166,12 +169,12 @@ public class HourlyForecastPresenter extends BaseHourlyPresenter<HourlyForecastV
                 .flatMap(hourlyForecastDarksky -> Observable.fromIterable(parsePojoModel(null, null, hourlyForecastDarksky)));
     }
 
-    private List<BaseViewModel> parsePojoModel(HourlyForecastWunderground hourlyForecastWunderground, HourlyForecastAccuweather hourlyForecastAccuweather, HourlyForecastDarksky hourlyForecastDarksky) {
+    private List<BaseViewModel> parsePojoModel(DatumHourlyWeatherbitio hourlyForecastWeatherbitIO, HourlyForecastAccuweather hourlyForecastAccuweather, HourlyForecastDarksky hourlyForecastDarksky) {
         List<BaseViewModel> items = new ArrayList<BaseViewModel>();
         //Log.d(LOG_TAG, "Realm: " + hourlyForecastWunderground.getId());
-        if (hourlyForecastWunderground != null) {
-            items.add(new ForecastHourlyItemViewModel(hourlyForecastWunderground));
-            Log.d(LOG_TAG, "RealmWU " + hourlyForecastWunderground.getTemp().getMetric());
+        if (hourlyForecastWeatherbitIO != null) {
+            items.add(new ForecastHourlyItemViewModel(hourlyForecastWeatherbitIO));
+            Log.d(LOG_TAG, "RealmWBIO " + hourlyForecastWeatherbitIO.getTemp());
             //Log.d(LOG_TAG, "RealmWU: " + hourlyForecastWunderground.getId());
         }
         if (hourlyForecastAccuweather != null) {

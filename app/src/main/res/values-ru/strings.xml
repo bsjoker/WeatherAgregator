@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Погодный агрегатор</string>
+    <string name="app_name">Прогноз погоды</string>
     <string name="footerDM">Для удаления города из списка\nнажмите и удерживайте на нём несколько секунд.</string>
     <string name="search_hint">Для поиска города нажмите на значек\nпоиска и введите название города.</string>
     <string name="search_activity_name">Найти город</string>
@@ -16,6 +16,8 @@
     <string name="Farengeit">F</string>
     <string name="day">День</string>
     <string name="night">Ночь</string>
+
+    <string name="error_AW">Нет данных от AccuWeather</string>
     <array name="names_tab">
         <item>Почасовой</item>
         <item>5 дней</item>
@@ -34,6 +36,19 @@
         <item>Нет данных</item>
     </array>
 
+    <array name="accuweatherApiKey">
+        <item>GCScIHjGfR3BoMc1xYQAgijvKLx4dlDI</item>
+        <item>kRrJpTHhlzqBtlM7HQ02OAnYb8R6E5mr</item>
+        <item>fv316GeygrHMYVxmbeFt1QJp0OWePdyp</item>
+        <item>QuUvCsDm5Y1xvd3zTZ5FD0czyIRYqlBi</item>
+        <item>32ZUSkAmdfcb0SF97mg2k9PosgcRssji</item>
+        <item>GhcK0Ar1pHENwk5Eufd6naAGBarOWjXm</item>
+        <item>J0uZljzoljn0ert8GvoHxrrM1Ej4OoYj</item>
+        <item>d52puH31MpGWnWHeQkVEWGn81AhHFMZI</item>
+        <item>Yx8bmNySr0Vgyw8LmG6FAfGBhQnXEXZk</item>
+        <item>fgL5zwzEG7007DJ375AF2zQdY0tLKDU5</item>
+    </array>
+
     <string name="clear">Ясно</string>
     <string name="partly_cloudy">Переменная облачность</string>
     <string name="cloudy">Облачно</string>
@@ -45,4 +60,7 @@
     <string name="na">Нет данных</string>
 
     <string name="screen_name_news">Добавить город</string>
+
+    <string name="facebook_app_id">1708124582638673</string>
+    <string name="facebook_login_protocol_scheme">fb1708124582638673</string>
 </resources>

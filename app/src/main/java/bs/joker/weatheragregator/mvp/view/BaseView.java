@@ -8,6 +8,7 @@ import java.util.List;
 
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 
 /**
@@ -16,7 +17,7 @@ import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 
 public interface BaseView extends MvpView {
     void showError(String message);
-    void setCurrentCond(CurrentObservation currentCond, Time currentTime);
+    void setCurrentCond(DatumCurWeatherbitio currentCond, Time currentTime);
     void setCityKeyAWToDatabase(String key);
     void setItemsCIty(List<Geoname> items);
 }

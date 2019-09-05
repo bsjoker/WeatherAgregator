@@ -3,6 +3,8 @@ package bs.joker.weatheragregator.common.utils;
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
+import bs.joker.weatheragregator.model.weatherbitio.hourly.DatumHourlyWeatherbitio;
+import bs.joker.weatheragregator.model.weatherbitio.hourly.HourlyForecastWeatherbitIO;
 import bs.joker.weatheragregator.model.wunderground.HourlyForecastWunderground;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecast_ok;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecastday_;
@@ -28,6 +30,14 @@ public class SetID {
         mhourlyForecastWU.getWindchill().setId(i);
         mhourlyForecastWU.getWspd().setId(i);
         return mhourlyForecastWU;
+    }
+
+    public static DatumHourlyWeatherbitio setIDHourlyWBIO (DatumHourlyWeatherbitio hourlyForecastWBIO, int i){
+        DatumHourlyWeatherbitio mhourlyForecastWBIO;
+        mhourlyForecastWBIO = hourlyForecastWBIO;
+        mhourlyForecastWBIO.setId(i);
+        mhourlyForecastWBIO.getWeather().setId(i);
+        return mhourlyForecastWBIO;
     }
 
     public static HourlyForecastAccuweather setIDHourlyAW (HourlyForecastAccuweather hourlyForecastAW, int i){

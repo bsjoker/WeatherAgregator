@@ -12,12 +12,7 @@ import javax.inject.Inject;
 
 import bs.joker.weatheragregator.common.manager.NetworkManager;
 import bs.joker.weatheragregator.model.PreferencesHelper;
-import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
-import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
-import bs.joker.weatheragregator.model.wunderground.astronomy.SunPhase;
-import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
-import bs.joker.weatheragregator.mvp.view.BaseView;
 import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,22 +31,64 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
     @Inject
     NetworkManager mNetworkManager;
 
-    public void loadData(boolean update) {
+//    public void loadDataWU(boolean update) {
+//        if (update) {
+//            onCreateLoadDataObservable()
+//                    .toList()
+//                    .retry()
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .doOnSubscribe(disposable -> {
+//                        onLoadStartWU();
+//                    })
+//                    .doFinally(() -> {
+//                        onLoadFinishWU();
+//                    })
+//                    .subscribe(repositories -> {
+//                        Log.d(LOG_TAG, "SubscribeNet");
+//                        onLoadingSuccess(repositories);
+//                    }, error -> {
+//                        error.printStackTrace();
+//                        onLoadingError(error);
+//                    });
+//        } else {
+//            onCreateRestoreDataObservable()
+//                    .toList()
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .doOnSubscribe(disposable -> {
+//                        onLoadStartWU();
+//                    })
+//                    .doFinally(() -> {
+//                        onLoadFinishWU();
+//                    })
+//                    .subscribe(repositories -> {
+//                        Log.d(LOG_TAG, "doOnSubscribeDB");
+//                        onLoadingSuccess(repositories);
+//                    }, error -> {
+//                        error.printStackTrace();
+//                        onLoadingError(error);
+//                    });
+//        }
+//    }
+
+    public void loadDataWBIO(boolean update) {
         if (update) {
-            onCreateLoadDataObservable()
+            onCreateLoadDataObservableHourlyWBIO()
                     .toList()
-                    .retry()
+                    //.retry()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> {
-                        onLoadStartWU();
+                        onLoadStartWBIO();
+                        Log.d(LOG_TAG, "onLoadStartWBIO");
                     })
                     .doFinally(() -> {
-                        onLoadFinishWU();
+                        onLoadFinishWBIO();
                     })
-                    .subscribe(repositories -> {
+                    .subscribe(repositoriesWBIO -> {
                         Log.d(LOG_TAG, "SubscribeNet");
-                        onLoadingSuccess(repositories);
+                        onLoadingSuccessWBIO(repositoriesWBIO);
                     }, error -> {
                         error.printStackTrace();
                         onLoadingError(error);
@@ -62,14 +99,15 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> {
-                        onLoadStartWU();
+                        onLoadStartWBIO();
+                        Log.d(LOG_TAG, "onLoadStartWBIO");
                     })
                     .doFinally(() -> {
-                        onLoadFinishWU();
+                        onLoadFinishWBIO();
                     })
-                    .subscribe(repositories -> {
+                    .subscribe(repositoriesWBIO -> {
                         Log.d(LOG_TAG, "doOnSubscribeDB");
-                        onLoadingSuccess(repositories);
+                        onLoadingSuccessWBIO(repositoriesWBIO);
                     }, error -> {
                         error.printStackTrace();
                         onLoadingError(error);
@@ -156,7 +194,7 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
         }
     }
 
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservable();
+    public abstract Observable<BaseViewModel> onCreateLoadDataObservableHourlyWBIO();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableHourlyAW();
 
@@ -170,7 +208,7 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
 
 
     public void loadStart(boolean update) {
-        loadData(update);
+        loadDataWBIO(update);
         loadDataAW(update);
         loadDataDS(update);
 
@@ -185,13 +223,13 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
         }
     }
 
-    public void onLoadStartWU() {
+    public void onLoadStartWBIO() {
         getViewState().showListProgress(1);
-        Log.d(LOG_TAG, "onLoadStartWU()");
+        Log.d(LOG_TAG, "onLoadStartWBIO()");
     }
 
-    public void onLoadFinishWU() {
-        Log.d(LOG_TAG, "onLoadFinishWU()");
+    public void onLoadFinishWBIO() {
+        Log.d(LOG_TAG, "onLoadFinishWBIO()");
     }
 
     public void onLoadStartAW() {
@@ -212,10 +250,10 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
         Log.d(LOG_TAG, "onLoadFinishDS()");
     }
 
-    public void onLoadingSuccess(List<BaseViewModel> items) {
+    public void onLoadingSuccessWBIO(List<BaseViewModel> items) {
         getViewState().setItems(items);
         getViewState().hideListProgress(1);
-        //Log.d(LOG_TAG, "onLoadingSuccessWU() - after");
+        Log.d(LOG_TAG, "onLoadingSuccessWBIO() - after");
     }
 
     public void onLoadingSuccessAW(List<BaseViewModel> items) {

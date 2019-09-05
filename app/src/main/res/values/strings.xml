@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather Aggregator</string>
+    <string name="app_name">Weather Forecast</string>
     <string name="footerDM">Press and hold for a few seconds\nto delete a city from the list.</string>
     <string name="search_hint">To search for a city, click on\nthe search icon and enter the city name.</string>
     <string name="search_activity_name">Search city</string>
@@ -16,6 +16,8 @@
     <string name="Farengeit">F</string>
     <string name="day">Day</string>
     <string name="night">Night</string>
+
+    <string name="error_AW">No data from AccuWeather</string>
     <array name="names_tab">
         <item>Hourly</item>
         <item>5 days</item>
@@ -32,6 +34,18 @@
         <item>Wind</item>
         <item>Fog</item>
         <item>N/A</item>
+    </array>
+
+    <array name="weatherbitioApiKey">
+        <!--<item>03477569d26942dbbcbd59fa2a717690</item>-->
+        <!--<item>18a67f601eb04616a174153e1ce7083f</item>-->
+        <!--<item>e704779d72a24979b8eb865751bb866a</item>-->
+        <item>66739b1ea31a4af291765a2ca31cf565</item>
+        <item>66739b1ea31a4af291765a2ca31cf565</item>
+        <item>66739b1ea31a4af291765a2ca31cf565</item>
+        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
+        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
+        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
     </array>
 
     <array name="accuweatherApiKey">
@@ -58,4 +72,7 @@
     <string name="na">N/A</string>
 
     <string name="screen_name_news">Add city</string>
+
+    <string name="facebook_app_id">1708124582638673</string>
+    <string name="facebook_login_protocol_scheme">fb1708124582638673</string>
 </resources>

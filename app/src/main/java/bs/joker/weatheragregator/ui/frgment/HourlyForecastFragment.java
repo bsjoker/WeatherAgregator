@@ -29,9 +29,6 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
     @InjectPresenter
     HourlyForecastPresenter mHourlyForecastPresenter;
 
-//    public HourlyForecastFragment(){
-//    }
-
     public static HourlyForecastFragment newInstance(int pos){
         HourlyForecastFragment hourlyForecastFragment = new HourlyForecastFragment();
         Bundle args = new Bundle();
@@ -49,12 +46,6 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
         MyApplication.getApplicationComponent().inject(this);
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        savedInstanceState = null;
-//        super.onActivityCreated(savedInstanceState);
-//    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -66,18 +57,6 @@ public class HourlyForecastFragment extends BaseHourlyForecastFragment {
         super.onDestroyView();
         Log.d("HourlyForecastFragment", "onDestroyView");
     }
-
-//    @Override
-//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-//        //savedInstanceState = null;
-//        super.onViewStateRestored(savedInstanceState);
-//
-//        if(savedInstanceState!=null) {
-//            Log.d("HourlyForecastFragment", "onViewStateRestored");
-//        } else{
-//            Log.d("HourlyForecastFragment", "onViewStateRestored - empty");
-//        }
-//    }
 
     @Override
     protected BaseHourlyPresenter onCreateBasePresenter() {

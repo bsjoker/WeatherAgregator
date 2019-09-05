@@ -1,20 +1,15 @@
 package bs.joker.weatheragregator.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -31,25 +26,16 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import java.io.InvalidClassException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
-import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
 import bs.joker.weatheragregator.common.utils.DayNight;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.geonames.Geoname;
-import bs.joker.weatheragregator.model.view.BaseViewModel;
-import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
-import bs.joker.weatheragregator.mvp.presenter.BasePresenter;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
-import bs.joker.weatheragregator.mvp.presenter.HourlyForecastPresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
-import bs.joker.weatheragregator.mvp.view.HourlyForecastView;
-import bs.joker.weatheragregator.ui.frgment.BaseHourlyForecastFragment;
-import bs.joker.weatheragregator.ui.frgment.HourlyForecastFragment;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -77,7 +63,8 @@ public class ScrollActivity extends BaseActivity implements BaseView {
         checkLangChange();
 
         setUpDrawer();
-        mForecastPresenter.loadStartAstronomy();
+        Log.d(TAG, "LoadStartCurrent");
+        mForecastPresenter.loadStartCurrent(true);
         loadCurrentData();
     }
 
@@ -295,19 +282,19 @@ public class ScrollActivity extends BaseActivity implements BaseView {
     }
 
     @Override
-    public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
+    public void setCurrentCond(DatumCurWeatherbitio currentCond, Time currentTime) {
         Log.d(TAG, "Current cond: " + currentTime);
+
+        int temp = (int) Math.round(currentCond.getTemp());
+        int windspeed = (int) Math.round(currentCond.getWindSpd());
+        temperature.setText(temp + getString(R.string.degrees));
+        tv_time_last_update.setText(getString(R.string.lastUpdate) + " " + currentTime.format("%H:%M"));
+
+        Log.d(TAG, "Temp: " + temp + ". Windspeed: " + windspeed);
+
         if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
-            int temp = (int) Math.round(currentCond.getTempC());
-            int windspeed = (int) Math.round(currentCond.getWindKph() * 0.28);
-            temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
-            tv_time_last_update.setText(getString(R.string.lastUpdate) + " " + currentTime.format("%H:%M"));
             wind.setText(getString(R.string.windSpeed) + " " + windspeed + " " + getString(R.string.speed_metric));
         } else {
-            int temp = (int) Math.round(currentCond.getTempF());
-            int windspeed = (int) Math.round(currentCond.getWindMph());
-            temperature.setText(String.valueOf(temp) + getString(R.string.degrees));
-            tv_time_last_update.setText(getString(R.string.lastUpdate) + " " + currentTime.format("%H:%M"));
             wind.setText(getString(R.string.windSpeed) + " " + windspeed + " " + getString(R.string.speed_english));
         }
         boolean isDay = DayNight.isDay(currentTime.toMillis(false));
@@ -315,81 +302,92 @@ public class ScrollActivity extends BaseActivity implements BaseView {
         collapsing_toolbar_layout.setTitle(mAccountHeader.getActiveProfile().getName().getText());
         collapsing_toolbar_layout.setExpandedTitleTextAppearance(R.style.AppTheme_ExpandedAppBar);
 
-        tv_condition.setText(currentCond.getWeather());
+        tv_condition.setText(currentCond.getWeather().getDescription());
 
-        switch (ConvertDescriptionCode.convertCodeD5WU(currentCond.getIcon())) {
-            case 1:
+        switch (Integer.parseInt(currentCond.getWeather().getCode())) {
+            case 800:
                 if (isDay) {
                     icon_cond.setImageResource(R.drawable.clear_sky_d);
                 } else {
                     icon_cond.setImageResource(R.drawable.clear_sky_n);
                 }
                 break;
-            case 2:
-            case 7:
-            case 8:
+            case 801:
+            case 802:
                 if (isDay) {
                     icon_cond.setImageResource(R.drawable.mostly_sunny_d);
                 } else {
                     icon_cond.setImageResource(R.drawable.mostly_sunny_n);
                 }
                 break;
-            case 3:
+            case 803:
                 if (isDay) {
                     icon_cond.setImageResource(R.drawable.mostly_cloudy_d);
                 } else {
                     icon_cond.setImageResource(R.drawable.mostly_cloudy_n);
                 }
                 break;
-            case 4:
+            case 804:
                 icon_cond.setImageResource(R.drawable.cloudy_d);
                 break;
-            case 5:
-            case 6:
+            case 700:
+            case 711:
+            case 721:
+            case 731:
+            case 741:
+            case 751:
                 icon_cond.setImageResource(R.drawable.fog);
                 break;
-            case 9:
-            case 18:
-            case 19:
-            case 20:
-            case 21:
-            case 24:
+            case 600:
+            case 601:
+            case 602:
+            case 621:
+            case 622:
                 icon_cond.setImageResource(R.drawable.snow);
                 break;
-            case 10:
-            case 11:
+            case 502:
+            case 520:
+            case 521:
+            case 522:
                 icon_cond.setImageResource(R.drawable.shower);
                 break;
-            case 12:
-            case 13:
+            case 300:
+            case 301:
+            case 302:
+            case 500:
+            case 501:
                 icon_cond.setImageResource(R.drawable.rain);
                 break;
-            case 14:
-            case 15:
+            case 200:
+            case 201:
+            case 202:
+            case 230:
+            case 231:
+            case 232:
+            case 233:
                 icon_cond.setImageResource(R.drawable.thunderstorm);
                 break;
-            case 16:
+            case 511:
+            case 611:
+            case 612:
                 icon_cond.setImageResource(R.drawable.ice_pellets);
                 break;
             case 17:
+            case 900:
                 icon_cond.setImageResource(R.drawable.na);
                 break;
-            case 22:
-            case 23:
-                icon_cond.setImageResource(R.drawable.ice_pellets);
-                break;
-            case 25:
+            case 610:
                 icon_cond.setImageResource(R.drawable.snow_rain);
                 break;
-            case 26:
+            case 623:
                 icon_cond.setImageResource(R.drawable.windy);
                 break;
-            case 27:
-                icon_cond.setImageResource(R.drawable.low_temp);
-                break;
-            case 28:
-                icon_cond.setImageResource(R.drawable.high_temp);
-                break;
+//            case 27:
+//                icon_cond.setImageResource(R.drawable.low_temp);
+//                break;
+//            case 28:
+//                icon_cond.setImageResource(R.drawable.high_temp);
+//                break;
             default:
                 icon_cond.setImageResource(R.drawable.na);
                 break;

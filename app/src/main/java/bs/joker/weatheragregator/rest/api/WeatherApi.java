@@ -5,12 +5,14 @@ import java.util.List;
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.accuweather.cityKey.CityKey;
 import bs.joker.weatheragregator.rest.model.response.AstronomyWundergroundResponse;
+import bs.joker.weatheragregator.rest.model.response.CurrentWeatherbitIOResponse;
 import bs.joker.weatheragregator.rest.model.response.CurrentWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastAccuWeatherResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastDarkskyResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.GeoNamesResponse;
 import bs.joker.weatheragregator.rest.model.response.HourlyForecastDarkskyResponse;
+import bs.joker.weatheragregator.rest.model.response.HourlyForecastWeatherbitIOResponse;
 import bs.joker.weatheragregator.rest.model.response.HourlyForecastWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.WeeklyForecastWundergroundResponse;
 import io.reactivex.Observable;
@@ -36,6 +38,9 @@ public interface WeatherApi {
     Observable<CurrentWundergroundResponse> getCurrentWU(@Url String url);
 
     @GET()
+    Observable<CurrentWeatherbitIOResponse> getCurrentWeatherbitIO(@Url String url);
+
+    @GET()
     Observable<GeoNamesResponse> getGeoNameCity(@Url String url);
 
 //    @GET(ApiMethods.CURRENT_WUNDERGROUND)
@@ -43,6 +48,9 @@ public interface WeatherApi {
 
     @GET()
     Observable<HourlyForecastWundergroundResponse> getForecastWU(@Url String url);
+
+    @GET()
+    Observable<HourlyForecastWeatherbitIOResponse> getForecastWBIO(@Url String url);
 
     @GET()
     //Observable<HourlyForecastWundergroundResponse> getForecastAW(@Url String url, @Path("cityID") String cityID);

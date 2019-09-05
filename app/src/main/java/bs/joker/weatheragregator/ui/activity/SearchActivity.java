@@ -28,6 +28,7 @@ import bs.joker.weatheragregator.common.manager.MyFragmentManager;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.geonames.Geoname;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
+import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
 import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
 import bs.joker.weatheragregator.mvp.view.BaseView;
@@ -119,7 +120,7 @@ public class SearchActivity extends MvpAppCompatActivity implements BaseView {
     }
 
     @Override
-    public void setCurrentCond(CurrentObservation currentCond, Time currentTime) {
+    public void setCurrentCond(DatumCurWeatherbitio currentCond, Time currentTime) {
 
     }
 
