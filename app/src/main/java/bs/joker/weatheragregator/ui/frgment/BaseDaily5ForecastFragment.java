@@ -34,14 +34,14 @@ import butterknife.Unbinder;
 public abstract class BaseDaily5ForecastFragment extends BaseFragment implements DailyForecastView {
     public static final String TAG = "BaseDaily5Fragment";
     @BindView(R.id.forecast_weather_recycler_view_wu)
-    RecyclerView mRecyclerViewWU;
+    RecyclerView mRecyclerViewWBIO;
     @BindView(R.id.forecast_weather_recycler_view_aw)
     RecyclerView mRecyclerViewAW;
     @BindView(R.id.forecast_weather_recycler_view_ds)
     RecyclerView mRecyclerViewDS;
 
     @BindView(R.id.logo_weatherbit)
-    ImageView logo_wu;
+    ImageView logo_wbio;
     @BindView(R.id.logo_accuweather)
     ImageView logo_aw;
     @BindView(R.id.logo_darksky)
@@ -50,7 +50,7 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     ImageView divider;
 
     @BindView(R.id.progressBarWBIO)
-    ProgressBar mProgressBarWU;
+    ProgressBar mProgressBarWBIO;
     @BindView(R.id.progressBarAW)
     ProgressBar mProgressBarAW;
     @BindView(R.id.progressBarDS)
@@ -86,11 +86,11 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
         Log.d(TAG, "State (daily): " + update);
         mBaseDailyPresenter.loadStartDaily(update);
 
-        logo_wu.setImageResource(R.drawable.wunderground_logo);
+        logo_wbio.setImageResource(R.drawable.weatherbitio_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
         logo_ds.setImageResource(R.drawable.darksky_logo);
 
-        mRecyclerViewWU.setHasFixedSize(true);
+        mRecyclerViewWBIO.setHasFixedSize(true);
         mRecyclerViewAW.setHasFixedSize(true);
         mRecyclerViewDS.setHasFixedSize(true);
 
@@ -99,9 +99,9 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     }
 
     private void setUpRecyclerView(View view) {
-        mRecyclerViewWU.setNestedScrollingEnabled(false);
-        mRecyclerViewWU.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerViewWU.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerViewWBIO.setNestedScrollingEnabled(false);
+        mRecyclerViewWBIO.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewWBIO.setItemAnimator(new DefaultItemAnimator());
         mRecyclerViewAW.setNestedScrollingEnabled(false);
         mRecyclerViewAW.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewAW.setItemAnimator(new DefaultItemAnimator());
@@ -112,7 +112,7 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
 
     private void setUpAdapret() {
         mHourlyForecastAdapter = new HourlyForecastAdapter();
-        mRecyclerViewWU.setAdapter(mHourlyForecastAdapter);
+        mRecyclerViewWBIO.setAdapter(mHourlyForecastAdapter);
         mHourlyForecastAdapterAW = new HourlyForecastAdapterAW();
         mRecyclerViewAW.setAdapter(mHourlyForecastAdapterAW);
         mHourlyForecastAdapterDS = new HourlyForecastAdapterDS();
@@ -141,7 +141,7 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     }
 
     @Override
-    public void setItemsD5WU(List<BaseViewModel> items) {
+    public void setItemsD5WBIO(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapter.setItems(items);
     }
@@ -162,7 +162,7 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     public void showListProgressD5(int n) {
         switch (n){
             case 1:
-                mProgressBarWU.setVisibility(View.VISIBLE);
+                mProgressBarWBIO.setVisibility(View.VISIBLE);
                 Log.d(TAG, "ShowProgressWU");
                 break;
             case 2:
@@ -182,7 +182,7 @@ public abstract class BaseDaily5ForecastFragment extends BaseFragment implements
     public void hideListProgressD5(int n) {
         switch (n) {
             case 1:
-                mProgressBarWU.setVisibility(View.GONE);
+                mProgressBarWBIO.setVisibility(View.GONE);
                 Log.d(TAG, "HideProgressWU");
                 break;
             case 2:

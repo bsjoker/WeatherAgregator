@@ -55,21 +55,32 @@ public class ForecastWeeklyViewHolder extends BaseViewHolder<ForecastWeeklyItemV
         tempMin.setText(items.getTempMin() + mContext.getString(R.string.degrees));
         switch (items.getIcon()) {
             case 1:
+            case 800:
                 icon.setImageResource(R.drawable.clear_sky_d_black);
                 break;
             case 2:
             case 7:
             case 8:
+            case 801:
+            case 802:
                     icon.setImageResource(R.drawable.mostly_sunny_d_black);
                 break;
             case 3:
+            case 803:
                 icon.setImageResource(R.drawable.mostly_cloudy_d_black);
                 break;
             case 4:
+            case 804:
                 icon.setImageResource(R.drawable.cloudy_d_black);
                 break;
             case 5:
             case 6:
+            case 700:
+            case 711:
+            case 721:
+            case 731:
+            case 741:
+            case 751:
                 icon.setImageResource(R.drawable.fog_black);
                 break;
             case 9:
@@ -78,24 +89,49 @@ public class ForecastWeeklyViewHolder extends BaseViewHolder<ForecastWeeklyItemV
             case 20:
             case 21:
             case 24:
+            case 600:
+            case 601:
+            case 602:
+            case 621:
+            case 622:
                 icon.setImageResource(R.drawable.snow_black);
                 break;
             case 10:
             case 11:
+            case 502:
+            case 520:
+            case 521:
+            case 522:
                 icon.setImageResource(R.drawable.shower_black);
                 break;
             case 12:
             case 13:
+            case 300:
+            case 301:
+            case 302:
+            case 500:
+            case 501:
                 icon.setImageResource(R.drawable.rain_black);
                 break;
             case 14:
             case 15:
+            case 200:
+            case 201:
+            case 202:
+            case 230:
+            case 231:
+            case 232:
+            case 233:
                 icon.setImageResource(R.drawable.thunderstorm_black);
                 break;
             case 16:
+            case 511:
+            case 611:
+            case 612:
                 icon.setImageResource(R.drawable.ice_pellets_black);
                 break;
             case 17:
+            case 900:
                 icon.setImageResource(R.drawable.na_black);
                 break;
             case 22:
@@ -103,9 +139,11 @@ public class ForecastWeeklyViewHolder extends BaseViewHolder<ForecastWeeklyItemV
                 icon.setImageResource(R.drawable.ice_pellets_black);
                 break;
             case 25:
+            case 610:
                 icon.setImageResource(R.drawable.snow_rain_black);
                 break;
             case 26:
+            case 623:
                 icon.setImageResource(R.drawable.windy_black);
                 break;
             case 27:

@@ -18,6 +18,7 @@ import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
 import bs.joker.weatheragregator.model.view.BaseViewModel;
 import bs.joker.weatheragregator.model.view.ForecastDaily5ItemViewModel;
+import bs.joker.weatheragregator.model.weatherbitio.daily.DatumDailyWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecast_ok;
 import bs.joker.weatheragregator.mvp.view.DailyForecastView;
 import bs.joker.weatheragregator.rest.api.ApiMethods;
@@ -34,7 +35,7 @@ import io.realm.RealmResults;
 
 public class DailyForecastPresenter extends BaseDailyPresenter<DailyForecastView> {
     public static final String LOG_TAG = "DailyForecastPresenter";
-    private List<Forecast_ok> listWU;
+    private List<DatumDailyWeatherbitio> listWBIO;
     private List<Daily5ForecastAW> listAW;
     private List<DailyForecastDarksky> listDS;
 
@@ -46,22 +47,22 @@ public class DailyForecastPresenter extends BaseDailyPresenter<DailyForecastView
     }
 
     @Override
-    public Observable<BaseViewModel> onCreateLoadDataObservableDaily5WU() {
-        Log.d(LOG_TAG, "ObservableDaily5WU");
+    public Observable<BaseViewModel> onCreateLoadDataObservableDaily5WBIO() {
+        Log.d(LOG_TAG, "ObservableDaily5WBIO");
         final int[] i = {1};
-        return mWeatherApi.getDaily5ForecastWU(UrlMaker.getUrl(ApiMethods.DAILY_5_WEEKLY_WUNDERGROUND)).flatMap(daily5ForecastWundergroundResponse ->
-                Observable.fromIterable(ListHelper.getListDaily5WU(daily5ForecastWundergroundResponse.daily5forecastWU.simpleforecast.forecastday, daily5ForecastWundergroundResponse.daily5forecastWU.txt_forecast.forecastday))
+        return mWeatherApi.getDaily5ForecastWBIO(UrlMaker.getUrlWeatherbitio(ApiMethods.DAILY_5_WEATHERBIT_IO)).flatMap(daily5ForecastWeatherbitioResponse ->
+                Observable.fromIterable(daily5ForecastWeatherbitioResponse.weatherbitio_list)
         )
                 .take(5)
-                .doOnNext(daily5ForecastWunderground -> {
-                    daily5ForecastWunderground.setId(i[0]);
+                .doOnNext(daily5ForecastWeatherbitIO -> {
+                    daily5ForecastWeatherbitIO = SetID.setIDDaily5WBIO(daily5ForecastWeatherbitIO, i[0]);
                     //Log.d(LOG_TAG, "Daily5WU" + daily5ForecastWunderground.getLow());
-                    saveToDb(daily5ForecastWunderground);
+                    saveToDb(daily5ForecastWeatherbitIO);
                     i[0]++;
                 })
-                .flatMap(daily5ForecastWunderground -> {
+                .flatMap(daily5ForecastWeatherbitIO -> {
                     List<BaseViewModel> items = new ArrayList<BaseViewModel>();
-                    items.add(new ForecastDaily5ItemViewModel(daily5ForecastWunderground));
+                    items.add(new ForecastDaily5ItemViewModel(daily5ForecastWeatherbitIO));
                     return io.reactivex.Observable.fromIterable(items);
                 });
     }
@@ -111,23 +112,23 @@ public class DailyForecastPresenter extends BaseDailyPresenter<DailyForecastView
     }
 
     //Восстановление из БД погоды на 5 дней с Wunderground
-    public Callable<List<Forecast_ok>> getListFromRealmCallableDaily5WU() {
+    public Callable<List<DatumDailyWeatherbitio>> getListFromRealmCallableDaily5WBIO() {
         return () -> {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(inRealm-> {
-                RealmResults<Forecast_ok> realmResults = realm.where(Forecast_ok.class)
+                RealmResults<DatumDailyWeatherbitio> realmResults = realm.where(DatumDailyWeatherbitio.class)
                         .findAll();
-                listWU = realm.copyFromRealm(realmResults);
+                listWBIO = realm.copyFromRealm(realmResults);
                 });
-            return listWU;
+            return listWBIO;
         };
     }
 
     @Override
-    public Observable<BaseViewModel> onCreateRestoreDataObservableDaily5WU() {
-        return Observable.fromCallable(getListFromRealmCallableDaily5WU())
+    public Observable<BaseViewModel> onCreateRestoreDataObservableDaily5WBIO() {
+        return Observable.fromCallable(getListFromRealmCallableDaily5WBIO())
                 .flatMap(Observable::fromIterable).take(5)
-                .flatMap(daily5ForecastWU -> Observable.fromIterable(parsePojoModelDaily(daily5ForecastWU, null, null)));
+                .flatMap(daily5ForecastWBIO -> Observable.fromIterable(parsePojoModelDaily(daily5ForecastWBIO, null, null)));
     }
 
     //Восстановление из БД погоды на 5 дней с AccuWeather
@@ -170,11 +171,11 @@ public class DailyForecastPresenter extends BaseDailyPresenter<DailyForecastView
                 .flatMap(dailyForecastDarksky -> Observable.fromIterable(parsePojoModelDaily(null, null, dailyForecastDarksky)));
     }
 
-    private List<BaseViewModel> parsePojoModelDaily(Forecast_ok daily5ForecastWU, Daily5ForecastAW daily5ForecastAW, DailyForecastDarksky dailyForecastDarksky) {
+    private List<BaseViewModel> parsePojoModelDaily(DatumDailyWeatherbitio daily5ForecastWBIO, Daily5ForecastAW daily5ForecastAW, DailyForecastDarksky dailyForecastDarksky) {
         List<BaseViewModel> items = new ArrayList<BaseViewModel>();
         //Log.d(LOG_TAG, "Realm: " + hourlyForecastWunderground.getId());
-        if (daily5ForecastWU != null) {
-            items.add(new ForecastDaily5ItemViewModel(daily5ForecastWU));
+        if (daily5ForecastWBIO != null) {
+            items.add(new ForecastDaily5ItemViewModel(daily5ForecastWBIO));
             //Log.d(LOG_TAG, "Realm5D_WU: " + daily5ForecastWU.getId());
         }
         if (daily5ForecastAW != null) {

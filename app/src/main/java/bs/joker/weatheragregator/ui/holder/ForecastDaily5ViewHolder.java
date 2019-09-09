@@ -6,14 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import bs.joker.MyApplication;
 import bs.joker.weatheragregator.R;
-import bs.joker.weatheragregator.common.utils.LocalStorage;
 
-import bs.joker.weatheragregator.di.module.StorageModule;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.view.ForecastDaily5ItemViewModel;
 import butterknife.BindView;
@@ -25,7 +22,6 @@ import butterknife.ButterKnife;
 
 public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemViewModel> {
 
-    LocalStorage mLocalStorage;
     @BindView(R.id.date_tv)
     public TextView date_tv;
     @BindView(R.id.temp_max)
@@ -82,6 +78,7 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
     public int getIcon(int code, boolean isDay){
         switch (code) {
             case 1:
+            case 800:
                 if(isDay) {
                     icon = R.drawable.clear_sky_d_black;
                 }else {
@@ -90,18 +87,22 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
             case 2:
             case 7:
             case 8:
+            case 801:
+            case 802:
                 if(isDay) {
                     icon = R.drawable.mostly_sunny_d_black;
                 }else {
                 icon = R.drawable.mostly_sunny_n_black;}
                 break;
             case 3:
+            case 803:
                 if(isDay) {
                     icon = R.drawable.mostly_cloudy_d_black;
                 }else {
                 icon = R.drawable.mostly_cloudy_n_black;}
                 break;
             case 4:
+            case 804:
                 if(isDay) {
                     icon = R.drawable.cloudy_d_black;
                 }else {
@@ -109,6 +110,12 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
                 break;
             case 5:
             case 6:
+            case 700:
+            case 711:
+            case 721:
+            case 731:
+            case 741:
+            case 751:
                 if(isDay) {
                     icon = R.drawable.fog_black;
                 }else {
@@ -120,6 +127,11 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
             case 20:
             case 21:
             case 24:
+            case 600:
+            case 601:
+            case 602:
+            case 621:
+            case 622:
                 if(isDay) {
                     icon = R.drawable.snow_black;
                 }else {
@@ -127,6 +139,10 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
                 break;
             case 10:
             case 11:
+            case 502:
+            case 520:
+            case 521:
+            case 522:
                 if(isDay) {
                     icon = R.drawable.shower_black;
                 }else {
@@ -134,6 +150,11 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
                 break;
             case 12:
             case 13:
+            case 300:
+            case 301:
+            case 302:
+            case 500:
+            case 501:
                 if(isDay) {
                     icon = R.drawable.rain_black;
                 }else {
@@ -141,18 +162,29 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
                 break;
             case 14:
             case 15:
+            case 200:
+            case 201:
+            case 202:
+            case 230:
+            case 231:
+            case 232:
+            case 233:
                 if(isDay) {
                     icon = R.drawable.thunderstorm_black;
                 }else {
                 icon = R.drawable.thunderstorm_black;}
                 break;
             case 16:
+            case 511:
+            case 611:
+            case 612:
                 if(isDay) {
                     icon = R.drawable.ice_pellets_black;
                 }else {
                 icon = R.drawable.ice_pellets_black;}
                 break;
             case 17:
+            case 900:
                 if(isDay) {
                     icon = R.drawable.na_black;
                 }else {
@@ -166,12 +198,14 @@ public class ForecastDaily5ViewHolder extends BaseViewHolder<ForecastDaily5ItemV
                 icon = R.drawable.ice_pellets_black;}
                 break;
             case 25:
+            case 610:
                 if(isDay) {
                     icon = R.drawable.snow_rain_black;
                 }else {
                 icon = R.drawable.snow_rain_black;}
                 break;
             case 26:
+            case 623:
                 if(isDay) {
                     icon = R.drawable.windy_black;
                 }else {

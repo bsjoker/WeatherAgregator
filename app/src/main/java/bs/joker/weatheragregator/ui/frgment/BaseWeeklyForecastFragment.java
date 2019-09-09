@@ -42,7 +42,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     RecyclerView mRecyclerViewDS;
 
     @BindView(R.id.logo_weatherbit)
-    ImageView logo_wu;
+    ImageView logo_wbio;
     @BindView(R.id.logo_accuweather)
     ImageView logo_aw;
     @BindView(R.id.logo_darksky)
@@ -51,7 +51,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     ImageView divider;
 
     @BindView(R.id.progressBarWBIO)
-    ProgressBar mProgressBarWU;
+    ProgressBar mProgressBarWBIO;
     @BindView(R.id.progressBarAW)
     ProgressBar mProgressBarAW;
     @BindView(R.id.progressBarDS)
@@ -64,7 +64,6 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     HourlyForecastAdapterDS mHourlyForecastAdapterDS;
 
     protected BaseWeeklyPresenter mBaseWeeklyPresenter;
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -85,7 +84,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
         Log.d(TAG, "State (weekly): " + update);
         mBaseWeeklyPresenter.loadStartWeekly(update);
 
-        logo_wu.setImageResource(R.drawable.wunderground_logo);
+        logo_wbio.setImageResource(R.drawable.weatherbitio_logo);
         logo_aw.setImageResource(R.drawable.aweather_logo);
         logo_ds.setImageResource(R.drawable.darksky_logo);
 
@@ -141,7 +140,7 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     }
 
     @Override
-    public void setItemsWeeklyWU(List<BaseViewModel> items) {
+    public void setItemsWeeklyWBIO(List<BaseViewModel> items) {
         Log.d(TAG, "Size: " + items.size());
         mHourlyForecastAdapter.setItems(items);
     }
@@ -162,8 +161,8 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     public void showListProgressWeekly(int n) {
         switch (n){
             case 1:
-                mProgressBarWU.setVisibility(View.VISIBLE);
-                Log.d(TAG, "ShowProgressWU");
+                mProgressBarWBIO.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ShowProgressWBIO");
                 break;
             case 2:
                 mProgressBarAW.setVisibility(View.VISIBLE);
@@ -182,8 +181,8 @@ public abstract class BaseWeeklyForecastFragment extends BaseFragment implements
     public void hideListProgressWeekly(int n) {
         switch (n) {
             case 1:
-                mProgressBarWU.setVisibility(View.GONE);
-                Log.d(TAG, "HideProgressWU");
+                mProgressBarWBIO.setVisibility(View.GONE);
+                Log.d(TAG, "HideProgressWBIO");
                 break;
             case 2:
                 mProgressBarAW.setVisibility(View.GONE);

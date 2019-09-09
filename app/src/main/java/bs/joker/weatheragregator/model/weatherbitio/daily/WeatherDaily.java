@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.weatherbitio.daily;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Weather {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class WeatherDaily extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("icon")
     @Expose
     private String icon;
@@ -15,6 +20,14 @@ public class Weather {
     @SerializedName("description")
     @Expose
     private String description;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public String getIcon() {
         return icon;

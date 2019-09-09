@@ -230,7 +230,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 //
 //        item.setTempC(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTemp", 0)));
 //        item.setTempF(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curTempF", 0)));
-//        item.setWeather(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
+//        item.setWeatherDaily(PreferencesHelper.getSharedPreferences().getString("curCond", "Н/Д"));
 //        item.setIcon(PreferencesHelper.getSharedPreferences().getString("curIcon", "Н/Д"));
 //        item.setWindKph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeed", 0)));
 //        item.setWindMph(Double.longBitsToDouble(PreferencesHelper.getSharedPreferences().getLong("curWindSpeedUs", 0)));
@@ -266,7 +266,7 @@ public abstract class BasePresenter<V extends BaseView> extends MvpPresenter<V> 
 //            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
 //            PreferencesHelper.savePreference("curWindSpeed", Double.doubleToRawLongBits(item.getWindKph()));
 //            PreferencesHelper.savePreference("curWindSpeedUs", Double.doubleToRawLongBits(item.getWindMph()));
-//            PreferencesHelper.savePreference("curCond", item.getWeather());
+//            PreferencesHelper.savePreference("curCond", item.getWeatherDaily());
 //            PreferencesHelper.savePreference("curIcon", item.getIcon());
 //        } catch (InvalidClassException e) {
 //            e.printStackTrace();

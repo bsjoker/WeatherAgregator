@@ -2,11 +2,9 @@ package bs.joker.weatheragregator.common.utils;
 
 import bs.joker.weatheragregator.model.accuweather.HourlyForecastAccuweather;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
-import bs.joker.weatheragregator.model.darksky.HourlyForecastDarksky;
+import bs.joker.weatheragregator.model.weatherbitio.daily.DatumDailyWeatherbitio;
 import bs.joker.weatheragregator.model.weatherbitio.hourly.DatumHourlyWeatherbitio;
-import bs.joker.weatheragregator.model.weatherbitio.hourly.HourlyForecastWeatherbitIO;
 import bs.joker.weatheragregator.model.wunderground.HourlyForecastWunderground;
-import bs.joker.weatheragregator.model.wunderground.daily5.Forecast_ok;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecastday_;
 
 /**
@@ -78,6 +76,14 @@ public class SetID {
 //        mDaily5WU.getSnowNight().setId(i);
 //        return mDaily5WU;
 //    }
+
+    public static DatumDailyWeatherbitio setIDDaily5WBIO (DatumDailyWeatherbitio daily5ForecastWBIO, int i){
+        DatumDailyWeatherbitio mDaily5WBIO;
+        mDaily5WBIO = daily5ForecastWBIO;
+        mDaily5WBIO.setId(i);
+        mDaily5WBIO.getWeatherDaily().setId(i);
+        return mDaily5WBIO;
+    }
 
     public static Daily5ForecastAW setIDDaily5AW (Daily5ForecastAW daily5ForecastAW, int i){
         Daily5ForecastAW mDaily5AW = daily5ForecastAW;

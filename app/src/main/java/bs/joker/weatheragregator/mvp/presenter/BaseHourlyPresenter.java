@@ -39,10 +39,10 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
 //                    .subscribeOn(Schedulers.io())
 //                    .observeOn(AndroidSchedulers.mainThread())
 //                    .doOnSubscribe(disposable -> {
-//                        onLoadStartWU();
+//                        onLoadStartWBIO();
 //                    })
 //                    .doFinally(() -> {
-//                        onLoadFinishWU();
+//                        onLoadFinishWBIO();
 //                    })
 //                    .subscribe(repositories -> {
 //                        Log.d(LOG_TAG, "SubscribeNet");
@@ -57,10 +57,10 @@ public abstract class BaseHourlyPresenter<V extends HourlyForecastView> extends 
 //                    .subscribeOn(Schedulers.io())
 //                    .observeOn(AndroidSchedulers.mainThread())
 //                    .doOnSubscribe(disposable -> {
-//                        onLoadStartWU();
+//                        onLoadStartWBIO();
 //                    })
 //                    .doFinally(() -> {
-//                        onLoadFinishWU();
+//                        onLoadFinishWBIO();
 //                    })
 //                    .subscribe(repositories -> {
 //                        Log.d(LOG_TAG, "doOnSubscribeDB");

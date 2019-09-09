@@ -80,7 +80,7 @@ public class DatumCurWeatherbitio {
     private Double uv;
     @SerializedName("precip")
     @Expose
-    private Integer precip;
+    private Double precip;
     @SerializedName("wind_dir")
     @Expose
     private Integer windDir;
@@ -310,11 +310,11 @@ public class DatumCurWeatherbitio {
         this.uv = uv;
     }
 
-    public Integer getPrecip() {
+    public Double getPrecip() {
         return precip;
     }
 
-    public void setPrecip(Integer precip) {
+    public void setPrecip(Double precip) {
         this.precip = precip;
     }
 

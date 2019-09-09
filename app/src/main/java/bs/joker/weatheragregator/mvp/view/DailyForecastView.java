@@ -11,7 +11,7 @@ import bs.joker.weatheragregator.model.view.BaseViewModel;
  */
 
 public interface DailyForecastView extends MainView {
-    void setItemsD5WU(List<BaseViewModel> items);
+    void setItemsD5WBIO(List<BaseViewModel> items);
     void setItemsD5AW(List<BaseViewModel> items);
     void setItemsD5DS(List<BaseViewModel> items);
     void showListProgressD5(int n);

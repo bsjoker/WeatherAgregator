@@ -37,15 +37,11 @@
     </array>
 
     <array name="weatherbitioApiKey">
-        <!--<item>03477569d26942dbbcbd59fa2a717690</item>-->
-        <!--<item>18a67f601eb04616a174153e1ce7083f</item>-->
-        <!--<item>e704779d72a24979b8eb865751bb866a</item>-->
+        <item>03477569d26942dbbcbd59fa2a717690</item>
+        <item>18a67f601eb04616a174153e1ce7083f</item>
+        <item>e704779d72a24979b8eb865751bb866a</item>
         <item>66739b1ea31a4af291765a2ca31cf565</item>
-        <item>66739b1ea31a4af291765a2ca31cf565</item>
-        <item>66739b1ea31a4af291765a2ca31cf565</item>
-        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
-        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
-        <!--<item>bed7d0c565f640afb03ea703403b6dab</item>-->
+        <item>bed7d0c565f640afb03ea703403b6dab</item>
     </array>
 
     <array name="accuweatherApiKey">

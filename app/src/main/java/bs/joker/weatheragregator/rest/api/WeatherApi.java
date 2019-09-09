@@ -9,6 +9,7 @@ import bs.joker.weatheragregator.rest.model.response.CurrentWeatherbitIOResponse
 import bs.joker.weatheragregator.rest.model.response.CurrentWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastAccuWeatherResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastDarkskyResponse;
+import bs.joker.weatheragregator.rest.model.response.Daily5ForecastWeatherbitIOResponse;
 import bs.joker.weatheragregator.rest.model.response.Daily5ForecastWundergroundResponse;
 import bs.joker.weatheragregator.rest.model.response.GeoNamesResponse;
 import bs.joker.weatheragregator.rest.model.response.HourlyForecastDarkskyResponse;
@@ -60,7 +61,7 @@ public interface WeatherApi {
     Observable<HourlyForecastDarkskyResponse> getForecastDS(@Url String url);
 
     @GET()
-    Observable<Daily5ForecastWundergroundResponse> getDaily5ForecastWU(@Url String url);
+    Observable<Daily5ForecastWeatherbitIOResponse> getDaily5ForecastWBIO(@Url String url);
 
     @GET()
     Observable<Daily5ForecastAccuWeatherResponse> getDaily5ForecastAW(@Url String url);

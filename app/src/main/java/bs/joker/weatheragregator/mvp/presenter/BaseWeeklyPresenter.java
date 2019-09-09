@@ -24,37 +24,37 @@ import io.realm.RealmObject;
 public abstract class BaseWeeklyPresenter<V extends WeeklyForecastView> extends MvpPresenter<V> {
     public static final String LOG_TAG = "BaseWeeklyPresenter";
 
-    public void loadDataWeeklyWU(boolean update) {
-        onCreateRestoreDataObservableWeeklyWU()
+    public void loadDataWeeklyWBIO(boolean update) {
+        onCreateRestoreDataObservableWeeklyWBIO()
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableWeeklyWU -> {
-                    onLoadStartWU();
+                .doOnSubscribe(disposableWeeklyWBIO -> {
+                    onLoadStartWBIO();
                 })
                 .doFinally(() -> {
-                    onLoadFinishWU();
+                    onLoadFinishWBIO();
                 })
-                .subscribe(repositoriesWeeklyWU -> {
-                    onLoadingSuccessWeeklyWU(repositoriesWeeklyWU);
+                .subscribe(repositoriesWeeklyWBIO -> {
+                    onLoadingSuccessWeeklyWBIO(repositoriesWeeklyWBIO);
                 }, error -> {
                     error.printStackTrace();
                     onLoadingError(error);
                 });
         if (update) {
-            onCreateLoadDataObservableWeeklyWU()
+            onCreateLoadDataObservableWeeklyWBIO()
                     .toList()
                     .retry()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableWeeklyWU -> {
-                        onLoadStartWU();
+                    .doOnSubscribe(disposableWeeklyWBIO -> {
+                        onLoadStartWBIO();
                     })
                     .doFinally(() -> {
-                        onLoadFinishWU();
+                        onLoadFinishWBIO();
                     })
-                    .subscribe(repositoriesWeeklyWU -> {
-                        onLoadingSuccessWeeklyWU(repositoriesWeeklyWU);
+                    .subscribe(repositoriesWeeklyWBIO -> {
+                        onLoadingSuccessWeeklyWBIO(repositoriesWeeklyWBIO);
                     }, error -> {
                         error.printStackTrace();
                         onLoadingError(error);
@@ -140,20 +140,20 @@ public abstract class BaseWeeklyPresenter<V extends WeeklyForecastView> extends 
         }
     }
 
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyWU();
+    public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyWBIO();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyAW();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableWeeklyDS();
 
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyWU();
+    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyWBIO();
 
     public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyAW();
 
     public abstract Observable<BaseViewModel> onCreateRestoreDataObservableWeeklyDS();
 
     public void loadStartWeekly(boolean update) {
-        loadDataWeeklyWU(update);
+        loadDataWeeklyWBIO(update);
         loadDataWeeklyAW(update);
         loadDataWeeklyDS(update);
 
@@ -168,13 +168,13 @@ public abstract class BaseWeeklyPresenter<V extends WeeklyForecastView> extends 
         }
     }
 
-    public void onLoadStartWU() {
+    public void onLoadStartWBIO() {
         getViewState().showListProgressWeekly(1);
-        Log.d(LOG_TAG, "onLoadStartWU()");
+        Log.d(LOG_TAG, "onLoadStartWBIO()");
     }
 
-    public void onLoadFinishWU() {
-        Log.d(LOG_TAG, "onLoadFinishWU()");
+    public void onLoadFinishWBIO() {
+        Log.d(LOG_TAG, "onLoadFinishWBIO()");
     }
 
     public void onLoadStartAW() {
@@ -195,8 +195,8 @@ public abstract class BaseWeeklyPresenter<V extends WeeklyForecastView> extends 
         Log.d(LOG_TAG, "onLoadFinishDS()");
     }
 
-    private void onLoadingSuccessWeeklyWU(List<BaseViewModel> items) {
-        getViewState().setItemsWeeklyWU(items);
+    private void onLoadingSuccessWeeklyWBIO(List<BaseViewModel> items) {
+        getViewState().setItemsWeeklyWBIO(items);
         getViewState().hideListProgressWeekly(1);
         //Log.d(LOG_TAG, "onLoadingSuccessWeekly_WU() - after");
     }

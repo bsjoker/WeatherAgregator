@@ -1,12 +1,12 @@
 package bs.joker.weatheragregator.model.view;
 
+import android.util.Log;
 import android.view.View;
 
-import bs.joker.weatheragregator.R;
 import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
-import bs.joker.weatheragregator.model.wunderground.daily5.Forecast_ok;
+import bs.joker.weatheragregator.model.weatherbitio.daily.DatumDailyWeatherbitio;
 import bs.joker.weatheragregator.ui.holder.BaseViewHolder;
 import bs.joker.weatheragregator.ui.holder.ForecastDaily5ViewHolder;
 
@@ -19,14 +19,15 @@ public class ForecastDaily5ItemViewModel extends BaseViewModel {
     private Integer icon_day, icon_night;
 
 
-    public ForecastDaily5ItemViewModel(Forecast_ok daily5forecastWU){
-        this.date_tv = daily5forecastWU.getDate_readable();
-        this.icon_day = ConvertDescriptionCode.convertCodeD5WU(daily5forecastWU.getIcon_day());
-        this.icon_night =  ConvertDescriptionCode.convertCodeD5WU(daily5forecastWU.getIcon_night());;
-        this.description_day = daily5forecastWU.getDescription_day();
-        this.description_night = daily5forecastWU.getDescription_night();
-        this.temp_max = daily5forecastWU.getTemp_max();
-        this.temp_min = daily5forecastWU.getTemp_min();
+    public ForecastDaily5ItemViewModel(DatumDailyWeatherbitio daily5forecastWBIO){
+        Log.d("ForecastDailyIVM", "Date: " + daily5forecastWBIO.getTs());
+        this.date_tv = new java.text.SimpleDateFormat("dd.MM EEE").format(new java.util.Date(daily5forecastWBIO.getTs()*1000L));
+        this.icon_day = daily5forecastWBIO.getWeatherDaily().getCode();
+        this.icon_night =  daily5forecastWBIO.getWeatherDaily().getCode();
+        this.description_day = daily5forecastWBIO.getWeatherDaily().getDescription();
+        this.description_night = daily5forecastWBIO.getWeatherDaily().getDescription();
+        this.temp_max = String.valueOf(Math.round(daily5forecastWBIO.getMaxTemp()));
+        this.temp_min = String.valueOf(Math.round(daily5forecastWBIO.getMinTemp()));
     }
 
     public ForecastDaily5ItemViewModel(Daily5ForecastAW daily5forecastAW){

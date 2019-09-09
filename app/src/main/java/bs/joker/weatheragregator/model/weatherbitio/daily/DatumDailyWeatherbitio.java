@@ -4,8 +4,13 @@ package bs.joker.weatheragregator.model.weatherbitio.daily;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DatumDailyWeatherbitio {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class DatumDailyWeatherbitio extends RealmObject {
+
+    @PrimaryKey
+    Integer Id;
     @SerializedName("moonrise_ts")
     @Expose
     private Integer moonriseTs;
@@ -78,18 +83,18 @@ public class DatumDailyWeatherbitio {
     @SerializedName("wind_dir")
     @Expose
     private Integer windDir;
-    @SerializedName("max_dhi")
-    @Expose
-    private Object maxDhi;
+//    @SerializedName("max_dhi")
+//    @Expose
+//    private Object maxDhi;
     @SerializedName("clouds_hi")
     @Expose
     private Integer cloudsHi;
     @SerializedName("precip")
     @Expose
-    private Integer precip;
+    private Double precip;
     @SerializedName("weather")
     @Expose
-    private Weather weather;
+    private WeatherDaily weatherDaily;
     @SerializedName("max_temp")
     @Expose
     private Double maxTemp;
@@ -111,6 +116,14 @@ public class DatumDailyWeatherbitio {
     @SerializedName("clouds_low")
     @Expose
     private Integer cloudsLow;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
 
     public Integer getMoonriseTs() {
         return moonriseTs;
@@ -304,13 +317,13 @@ public class DatumDailyWeatherbitio {
         this.windDir = windDir;
     }
 
-    public Object getMaxDhi() {
-        return maxDhi;
-    }
-
-    public void setMaxDhi(Object maxDhi) {
-        this.maxDhi = maxDhi;
-    }
+//    public Object getMaxDhi() {
+//        return maxDhi;
+//    }
+//
+//    public void setMaxDhi(Object maxDhi) {
+//        this.maxDhi = maxDhi;
+//    }
 
     public Integer getCloudsHi() {
         return cloudsHi;
@@ -320,20 +333,20 @@ public class DatumDailyWeatherbitio {
         this.cloudsHi = cloudsHi;
     }
 
-    public Integer getPrecip() {
+    public Double getPrecip() {
         return precip;
     }
 
-    public void setPrecip(Integer precip) {
+    public void setPrecip(Double precip) {
         this.precip = precip;
     }
 
-    public Weather getWeather() {
-        return weather;
+    public WeatherDaily getWeatherDaily() {
+        return weatherDaily;
     }
 
-    public void setWeather(Weather weather) {
-        this.weather = weather;
+    public void setWeatherDaily(WeatherDaily weatherDaily) {
+        this.weatherDaily = weatherDaily;
     }
 
     public Double getMaxTemp() {

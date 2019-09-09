@@ -66,8 +66,8 @@ public class ForecastPresenter extends BasePresenter<BaseView> {
         Log.d(LOG_TAG, "ObservableCurrentWeatherbitio");
         return mWeatherApi.getCurrentWeatherbitIO(UrlMaker.getUrlWeatherbitio(ApiMethods.CURRENT_CONDITIONS_IO)).flatMap(currentWeatherbitIO ->
         {
-            //Log.d(LOG_TAG, "ObservableCurrentWeatherbitio: " + currentWeatherbitIO.weatherbitio_list.get(0).getWeather().getCode());
-            Log.d(LOG_TAG, "ObservableCurrentWeatherbitio: res");
+            //Log.d(LOG_TAG, "ObservableCurrentWeatherbitio: " + currentWeatherbitIO.weatherbitio_list.get(0).getWeatherDaily().getCode());
+            Log.d(LOG_TAG, "ObservableCurrentWeatherbitio: res"+ currentWeatherbitIO.weatherbitio_list.get(0).getWeather().getCode());
             return io.reactivex.Observable.fromIterable(currentWeatherbitIO.weatherbitio_list);
         });
     }

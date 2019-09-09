@@ -7,6 +7,7 @@ import bs.joker.weatheragregator.common.utils.ConvertDescriptionCode;
 import bs.joker.weatheragregator.model.PreferencesHelper;
 import bs.joker.weatheragregator.model.accuweather.daily5.Daily5ForecastAW;
 import bs.joker.weatheragregator.model.darksky.DailyForecastDarksky;
+import bs.joker.weatheragregator.model.weatherbitio.daily.DatumDailyWeatherbitio;
 import bs.joker.weatheragregator.model.wunderground.daily5.Forecastday_;
 import bs.joker.weatheragregator.ui.holder.BaseViewHolder;
 import bs.joker.weatheragregator.ui.holder.ForecastWeeklyViewHolder;
@@ -19,17 +20,12 @@ public class ForecastWeeklyItemViewModel extends BaseViewModel {
     private String dayOfWeek, description, tempMax, tempMin;
     private Integer icon;
 
-    public ForecastWeeklyItemViewModel(Forecastday_ items){
-        this.dayOfWeek = new java.text.SimpleDateFormat("EEEE").format(new java.util.Date(Integer.valueOf(items.getDate().getEpoch())*1000L));
-        this.description = items.getConditions();
-        if (PreferencesHelper.getSharedPreferences().getBoolean("metric", true)) {
-            this.tempMax = items.getHigh().getCelsius();
-            this.tempMin = items.getLow().getCelsius();
-        } else {
-            this.tempMax = items.getHigh().getFahrenheit();
-            this.tempMin = items.getLow().getFahrenheit();
-        }
-        this.icon = ConvertDescriptionCode.convertCodeD5WU(items.getIcon());
+    public ForecastWeeklyItemViewModel(DatumDailyWeatherbitio items){
+        this.dayOfWeek = new java.text.SimpleDateFormat("EEEE").format(new java.util.Date(Integer.valueOf(items.getTs())*1000L));
+        this.description = items.getWeatherDaily().getDescription();
+        this.tempMax = String.valueOf(Math.round(items.getMaxTemp()));
+        this.tempMin = String.valueOf(Math.round(items.getMinTemp()));
+        this.icon = items.getWeatherDaily().getCode();
     }
 
     public ForecastWeeklyItemViewModel(Daily5ForecastAW items) {

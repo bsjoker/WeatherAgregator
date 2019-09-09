@@ -24,38 +24,38 @@ import io.realm.RealmObject;
 public abstract class BaseDailyPresenter<V extends DailyForecastView> extends MvpPresenter<V> {
     public static final String LOG_TAG = "BaseDailyPresenter";
 
-    public void loadDataDaily5WU(boolean update) {
-        onCreateRestoreDataObservableDaily5WU()
+    public void loadDataDaily5WBIO(boolean update) {
+        onCreateRestoreDataObservableDaily5WBIO()
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposableD5WU -> {
-                    onLoadStartWU();
+                .doOnSubscribe(disposableD5WBIO -> {
+                    onLoadStartWBIO();
                 })
                 .doFinally(() -> {
-                    onLoadFinishWU();
+                    onLoadFinishWBIO();
                 })
-                .subscribe(repositoriesD5WU -> {
-                    onLoadingSuccessD5WU(repositoriesD5WU);
+                .subscribe(repositoriesD5WBIO -> {
+                    onLoadingSuccessD5WBIO(repositoriesD5WBIO);
                 }, error -> {
                     error.printStackTrace();
                     onLoadingError(error);
                 });
 
         if (update) {
-            onCreateLoadDataObservableDaily5WU()
+            onCreateLoadDataObservableDaily5WBIO()
                     .toList()
-                    .retry()
+                    //.retry()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposableD5WU -> {
-                        onLoadStartWU();
+                    .doOnSubscribe(disposableD5WBIO -> {
+                        onLoadStartWBIO();
                     })
                     .doFinally(() -> {
-                        onLoadFinishWU();
+                        onLoadFinishWBIO();
                     })
-                    .subscribe(repositoriesD5WU -> {
-                        onLoadingSuccessD5WU(repositoriesD5WU);
+                    .subscribe(repositoriesD5WBIO -> {
+                        onLoadingSuccessD5WBIO(repositoriesD5WBIO);
                     }, error -> {
                         error.printStackTrace();
                         onLoadingError(error);
@@ -141,20 +141,20 @@ public abstract class BaseDailyPresenter<V extends DailyForecastView> extends Mv
         }
     }
 
-    public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5WU();
+    public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5WBIO();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5AW();
 
     public abstract Observable<BaseViewModel> onCreateLoadDataObservableDaily5DS();
 
-    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5WU();
+    public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5WBIO();
 
     public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5AW();
 
     public abstract Observable<BaseViewModel> onCreateRestoreDataObservableDaily5DS();
 
     public void loadStartDaily(boolean update) {
-        loadDataDaily5WU(update);
+        loadDataDaily5WBIO(update);
         loadDataDaily5AW(update);
         loadDataDaily5DS(update);
 
@@ -169,8 +169,8 @@ public abstract class BaseDailyPresenter<V extends DailyForecastView> extends Mv
         }
     }
 
-    private void onLoadingSuccessD5WU(List<BaseViewModel> items) {
-        getViewState().setItemsD5WU(items);
+    private void onLoadingSuccessD5WBIO(List<BaseViewModel> items) {
+        getViewState().setItemsD5WBIO(items);
         getViewState().hideListProgressD5(1);
         //Log.d(LOG_TAG, "onLoadingSuccessD5_WU() - after");
     }
@@ -187,13 +187,13 @@ public abstract class BaseDailyPresenter<V extends DailyForecastView> extends Mv
         //Log.d(LOG_TAG, "onLoadingSuccessD5_DS() - after");
     }
 
-    public void onLoadStartWU() {
+    public void onLoadStartWBIO() {
         getViewState().showListProgressD5(1);
-        Log.d(LOG_TAG, "onLoadStartWU()");
+        Log.d(LOG_TAG, "onLoadStartWBIO()");
     }
 
-    public void onLoadFinishWU() {
-        Log.d(LOG_TAG, "onLoadFinishWU()");
+    public void onLoadFinishWBIO() {
+        Log.d(LOG_TAG, "onLoadFinishWBIO()");
     }
 
     public void onLoadStartAW() {

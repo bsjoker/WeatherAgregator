@@ -11,7 +11,7 @@ import bs.joker.weatheragregator.model.view.BaseViewModel;
  */
 
 public interface WeeklyForecastView extends MainView {
-    void setItemsWeeklyWU(List<BaseViewModel> items);
+    void setItemsWeeklyWBIO(List<BaseViewModel> items);
     void setItemsWeeklyAW(List<BaseViewModel> items);
     void setItemsWeeklyDS(List<BaseViewModel> items);
     void showListProgressWeekly(int n);

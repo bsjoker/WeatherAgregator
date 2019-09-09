@@ -17,6 +17,7 @@ public class ApiMethods {
     //public static final String CURRENT_CONDITIONS_IO = "https://api.weatherbit.io/v2.0/current?lat=54.74306&lon=55.96779&lang=ru&units=M&key={apiKey}";
     public static final String CURRENT_CONDITIONS_IO = "https://api.weatherbit.io/v2.0/current?lat={lat}&lon={lng}&lang={lang}&units={unit}&key={apiKey}"; // M - [DEFAULT] Metric (Celcius, m/s, mm)    //I - Fahrenheit (F, mph, in)
     public static final String HOURLY_WEATHERBIT_IO = "https://api.weatherbit.io/v2.0/forecast/hourly?lat={lat}&lon={lng}&lang={lang}&units={unit}&key={apiKey}&hours=12";
+    public static final String DAILY_5_WEATHERBIT_IO = "https://api.weatherbit.io/v2.0/forecast/daily?lat={lat}&lon={lng}&lang={lang}&units={unit}&key={apiKey}";
 
     //public static final String DAILY_5_ACCUWEATHER = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/{cityKey}?apikey=fgL5zwzEG7007DJ375AF2zQdY0tLKDU5&language={lang}&details=true&metric{unit}";
     //public static final String HOURLY_ACCUWEATHER = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/{cityKey}?apikey=fgL5zwzEG7007DJ375AF2zQdY0tLKDU5&language={lang}&details=true&metric{unit}";
