@@ -45,6 +45,14 @@
             android:screenOrientation="portrait">
 
         </activity>
+
+        <activity
+            android:name=".ui.activity.Policity"
+            android:label="@string/policity_activity_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

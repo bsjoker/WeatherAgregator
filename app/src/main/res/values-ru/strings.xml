@@ -3,6 +3,7 @@
     <string name="footerDM">Для удаления города из списка\nнажмите и удерживайте на нём несколько секунд.</string>
     <string name="search_hint">Для поиска города нажмите на значек\nпоиска и введите название города.</string>
     <string name="search_activity_name">Найти город</string>
+    <string name="policity_activity_name">Policity activity</string>
     <string name="action_unit">Метрическая/Английская</string>
     <string name="action_refresh">Refresh</string>
 
@@ -16,6 +17,9 @@
     <string name="Farengeit">F</string>
     <string name="day">День</string>
     <string name="night">Ночь</string>
+
+    <string name="agree">Согласен</string>
+    <string name="close">Отказаться</string>
 
     <string name="error_AW">Нет данных от AccuWeather</string>
     <array name="names_tab">
