@@ -1,13 +1,10 @@
 package bs.joker;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
-import bs.joker.weatheragregator.common.utils.LocalStorage;
-import bs.joker.weatheragregator.di.component.ApplicationComponent;
-import bs.joker.weatheragregator.di.component.DaggerApplicationComponent;
-import bs.joker.weatheragregator.di.module.ApplicationModule;
-import bs.joker.weatheragregator.di.module.StorageModule;
+import bs.joker.weatherforecast.di.component.ApplicationComponent;
+import bs.joker.weatherforecast.di.component.DaggerApplicationComponent;
+import bs.joker.weatherforecast.di.module.ApplicationModule;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="bs.joker.weatheragregator">
+    package="bs.joker.weatherforecast">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
@@ -18,12 +18,12 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1708124582638673"
+        <provider android:authorities="com.facebook.app.FacebookContentProvider971906053149383"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name="bs.joker.weatherforecast.ui.activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -33,13 +33,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.ScrollActivity"
+            android:name="bs.joker.weatherforecast.ui.activity.ScrollActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name=".ui.activity.SearchActivity"
+            android:name="bs.joker.weatherforecast.ui.activity.SearchActivity"
             android:label="@string/search_activity_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.Policity"
+            android:name="bs.joker.weatherforecast.ui.activity.Policity"
             android:label="@string/policity_activity_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
