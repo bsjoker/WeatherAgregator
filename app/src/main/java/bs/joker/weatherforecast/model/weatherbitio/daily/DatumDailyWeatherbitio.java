@@ -37,7 +37,7 @@ public class DatumDailyWeatherbitio extends RealmObject {
     private Double windGustSpd;
     @SerializedName("snow_depth")
     @Expose
-    private Integer snowDepth;
+    private Double snowDepth;
     @SerializedName("clouds")
     @Expose
     private Integer clouds;
@@ -73,7 +73,7 @@ public class DatumDailyWeatherbitio extends RealmObject {
     private Double dewpt;
     @SerializedName("snow")
     @Expose
-    private Integer snow;
+    private Double snow;
     @SerializedName("uv")
     @Expose
     private Double uv;
@@ -189,11 +189,11 @@ public class DatumDailyWeatherbitio extends RealmObject {
         this.windGustSpd = windGustSpd;
     }
 
-    public Integer getSnowDepth() {
+    public Double getSnowDepth() {
         return snowDepth;
     }
 
-    public void setSnowDepth(Integer snowDepth) {
+    public void setSnowDepth(Double snowDepth) {
         this.snowDepth = snowDepth;
     }
 
@@ -285,11 +285,11 @@ public class DatumDailyWeatherbitio extends RealmObject {
         this.dewpt = dewpt;
     }
 
-    public Integer getSnow() {
+    public Double getSnow() {
         return snow;
     }
 
-    public void setSnow(Integer snow) {
+    public void setSnow(Double snow) {
         this.snow = snow;
     }
 

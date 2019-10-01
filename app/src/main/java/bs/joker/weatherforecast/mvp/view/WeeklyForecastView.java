@@ -1,10 +1,8 @@
-package bs.joker.weatheragregator.mvp.view;
-
-import com.arellomobile.mvp.MvpView;
+package bs.joker.weatherforecast.mvp.view;
 
 import java.util.List;
 
-import bs.joker.weatheragregator.model.view.BaseViewModel;
+import bs.joker.weatherforecast.model.view.BaseViewModel;
 
 /**
  * Created by 1 on 07.05.2018.

@@ -1,4 +1,4 @@
-package bs.joker.weatheragregator.ui.activity;
+package bs.joker.weatherforecast.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -18,21 +18,18 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.io.InvalidClassException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import bs.joker.MyApplication;
-import bs.joker.weatheragregator.R;
-import bs.joker.weatheragregator.common.manager.MyFragmentManager;
-import bs.joker.weatheragregator.model.PreferencesHelper;
-import bs.joker.weatheragregator.model.geonames.Geoname;
-import bs.joker.weatheragregator.model.view.BaseViewModel;
-import bs.joker.weatheragregator.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
-import bs.joker.weatheragregator.model.wunderground.current.CurrentObservation;
-import bs.joker.weatheragregator.mvp.presenter.ForecastPresenter;
-import bs.joker.weatheragregator.mvp.view.BaseView;
-import bs.joker.weatheragregator.ui.frgment.SearchCityFragment;
+import bs.joker.weatherforecast.R;
+import bs.joker.weatherforecast.common.manager.MyFragmentManager;
+import bs.joker.weatherforecast.model.PreferencesHelper;
+import bs.joker.weatherforecast.model.geonames.Geoname;
+import bs.joker.weatherforecast.model.weatherbitio.currentConditions.DatumCurWeatherbitio;
+import bs.joker.weatherforecast.mvp.presenter.ForecastPresenter;
+import bs.joker.weatherforecast.mvp.view.BaseView;
+import bs.joker.weatherforecast.ui.frgment.SearchCityFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
